@@ -2,7 +2,7 @@ import React from "react";
 
 import { Comment, Header, Form, Button } from 'semantic-ui-react';
 
-const CommentPost = () => (
+const CommentPost = ({ author, date, text, }) => (
   <div>
     {/* <Comment.Group size="mini" style={{
       paddingTop: 20
@@ -14,14 +14,17 @@ const CommentPost = () => (
       <Comment>
         <Comment.Avatar src="/images/avatar/small/matt.jpg" />
         <Comment.Content>
-          <Comment.Author as="a">Matt</Comment.Author>
+          <Comment.Author as="a">{author}</Comment.Author>
           <Comment.Metadata>
-            <div>Today at 5:42PM</div>
+            <div>
+              {/* Today at 5:42PM */}
+              {new Date(date).toDateString()}
+            </div>
           </Comment.Metadata>
-          <Comment.Text>How artistic!</Comment.Text>
-          <Comment.Actions>
+          <Comment.Text>{text}</Comment.Text>
+          {/* <Comment.Actions>
             <Comment.Action>Reply</Comment.Action>
-          </Comment.Actions>
+          </Comment.Actions> */}
         </Comment.Content>
       </Comment>
 
