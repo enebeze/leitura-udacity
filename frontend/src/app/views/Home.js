@@ -58,9 +58,11 @@ class Home extends Component {
         <MyHeader />
 
         <Container text style={{ marginTop: "7em" }}>
+        <div>
           <Button basic color="blue" fluid onClick={this.changeModal}>
             New post
           </Button>
+          </div>
           {/* 
                 <Header as="h1">Semantic UI React Fixed Template</Header>
                 <p>This is a basic fixed menu template using fixed size containers.</p>

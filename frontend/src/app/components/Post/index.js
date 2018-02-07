@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Item, Image, Header, Comment, Form, Button } from "semantic-ui-react";
 
 import CommentPost from "./../CommentPost";
+import { Divider } from "semantic-ui-react";
 
 class Post extends Component {
 
@@ -45,11 +46,12 @@ class Post extends Component {
         <Comment.Group
           size="mini"
           style={{
-            paddingTop: 0
+            paddingTop: 0,
+            maxWidth: "100%"
           }}
         >
           {hasComment && (
-            <Header as="h3" dividing>
+            <Header as="h3">
               Comments
             </Header>
           )}
@@ -70,6 +72,7 @@ class Post extends Component {
               icon="edit"
               primary
             />
+            <Divider />
           </Form>
         </Comment.Group>
       </div>
