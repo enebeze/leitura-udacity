@@ -12,7 +12,7 @@ const CommentPost = ({ author, date, text, }) => (
       </Header> */}
 
       <Comment>
-        <Comment.Avatar src="/images/avatar/small/matt.jpg" />
+        {/* <Comment.Avatar src="/images/avatar/small/matt.jpg" /> */}
         <Comment.Content>
           <Comment.Author as="a">{author}</Comment.Author>
           <Comment.Metadata>

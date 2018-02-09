@@ -1,11 +1,20 @@
 import React, { Component } from "react";
-import { Item, Image, Header, Comment, Form, Button } from "semantic-ui-react";
+import {
+  Item,
+  Image,
+  Header,
+  Comment,
+  Form,
+  Button,
+  Label,
+  Menu,
+  Icon
+} from "semantic-ui-react";
 
 import CommentPost from "./../CommentPost";
 import { Divider } from "semantic-ui-react";
 
 class Post extends Component {
-
   state = {
     comments: []
   };
@@ -20,13 +29,14 @@ class Post extends Component {
   }
 
   render() {
-    const { id, title, author, description, category, hasComment } = this.props;
+    const { id, title, author, description, category, hasComment, voteScore } = this.props;
     const { comments } = this.state;
-
+    const colorScore = voteScore > -1 ? "green" : "red";
     return (
       <div
         style={{
-          paddingTop: 40
+          paddingTop: 10,
+          paddingBottom: 10
         }}
       >
         <Item.Group>
@@ -38,7 +48,30 @@ class Post extends Component {
                 {/* <Image src="/images/short-paragraph.png" /> */}
                 {description}
               </Item.Description>
-              <Item.Extra>[{category}]</Item.Extra>
+              <Item.Extra>
+              <Button size="mini" as="div" labelPosition="right">
+                <Button.Group size="mini">
+                  <Button size="mini" color="green">
+                    <Icon name="like outline" />
+                    Like
+                  </Button>
+                  <Button.Or text={voteScore} />
+                  <Button size="mini" color="red">
+                    <Icon name="dislike outline" />
+                    Not like
+                  </Button>
+                </Button.Group>
+                {/* <Label as="a" basic color={colorScore} pointing="left">
+                  {voteScore}
+                </Label> */}
+              </Button>
+              </Item.Extra>
+              <Item.Extra>
+                <Label color="teal" size="tiny">
+                  {category}
+                </Label>
+              </Item.Extra>
+              
             </Item.Content>
           </Item>
         </Item.Group>
@@ -51,13 +84,21 @@ class Post extends Component {
           }}
         >
           {hasComment && (
-            <Header as="h3">
+            <Header as="h4">
               Comments
+              <Label size="mini" color="teal" as="a">
+                {comments.length}
+              </Label>
             </Header>
           )}
 
           {comments.map(c => (
-            <CommentPost key={c.id} author={c.author} text={c.body} date={c.timestamp} />
+            <CommentPost
+              key={c.id}
+              author={c.author}
+              text={c.body}
+              date={c.timestamp}
+            />
           ))}
           {/* <CommentPost /> */}
 
@@ -67,10 +108,11 @@ class Post extends Component {
               style={{ height: 80, minHeight: 80 }}
             />
             <Button
-              content="Add Reply"
+              content="Add Comment"
               labelPosition="left"
               icon="edit"
               primary
+              size="mini"
             />
             <Divider />
           </Form>

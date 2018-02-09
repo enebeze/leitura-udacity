@@ -28,6 +28,25 @@ const options = [
   { key: "f", text: "Female", value: "female" }
 ];
 
+const friendOptions = [
+  {
+    text: "All",
+    value: "All"
+  },
+  {
+    text: "react",
+    value: "react"
+  },
+  {
+    text: "redux",
+    value: "redux"
+  },
+  {
+    text: "udacity",
+    value: "udacty"
+  }
+];
+
 class Home extends Component {
   state = {
     showModal: false,
@@ -52,16 +71,16 @@ class Home extends Component {
   };
 
   render() {
-      const { posts } = this.state;
+    const { posts } = this.state;
     return (
       <div>
         <MyHeader />
 
         <Container text style={{ marginTop: "7em" }}>
-        <div>
-          <Button basic color="blue" fluid onClick={this.changeModal}>
-            New post
-          </Button>
+          <div>
+            <Button basic color="blue" fluid onClick={this.changeModal}>
+              New post
+            </Button>
           </div>
           {/* 
                 <Header as="h1">Semantic UI React Fixed Template</Header>
@@ -72,18 +91,33 @@ class Home extends Component {
                 </p> 
             */}
 
-            {
-                posts.map(p => (
-                <Post key={p.id} 
-                    id={p.id}
-                    title={p.title} 
-                    author={p.author} 
-                    description={p.body} 
-                    category={p.category}
-                    hasComment={p.commentCount > 0} />
-            ))}
-          
-          
+          <div
+            style={{
+              paddingTop: 20,
+              paddingBottom: 40,
+            }}
+          >
+            <Header as="h5" floated="left">
+              Categories by <Dropdown inline options={friendOptions} />
+            </Header>
+            <Header as="h5" floated="right">
+              Order by <Dropdown inline options={friendOptions} />
+            </Header>
+
+          </div>
+
+          {posts.map(p => (
+            <Post
+              key={p.id}
+              id={p.id}
+              title={p.title}
+              author={p.author}
+              description={p.body}
+              category={p.category}
+              hasComment={p.commentCount > 0}
+              voteScore={p.voteScore}
+            />
+          ))}
         </Container>
         <Footer />
 

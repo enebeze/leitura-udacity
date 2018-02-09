@@ -13,25 +13,20 @@ const Header = () => (
         />
         Leitura Udacity by Ebenézer
       </Menu.Item>
-      <Menu.Item as="a">Home</Menu.Item>
+      {/* <Menu.Item as="a">Home</Menu.Item> */}
 
-      <Dropdown item simple text="Dropdown">
-        <Dropdown.Menu>
-          <Dropdown.Item>List Item</Dropdown.Item>
-          <Dropdown.Item>List Item</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Header>Header Item</Dropdown.Header>
-          <Dropdown.Item>
-            <i className="dropdown icon" />
-            <span className="text">Submenu</span>
-            <Dropdown.Menu>
-              <Dropdown.Item>List Item</Dropdown.Item>
-              <Dropdown.Item>List Item</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown.Item>
-          <Dropdown.Item>List Item</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <Dropdown text='Filter' pointing className='link item'>
+      <Dropdown.Menu>
+        <Dropdown.Header>Categories</Dropdown.Header>
+        <Dropdown.Item selected >react</Dropdown.Item>
+        <Dropdown.Item>redux</Dropdown.Item>
+        <Dropdown.Item>udacity</Dropdown.Item>
+        <Dropdown.Divider />
+        {/* <Dropdown.Header>Order</Dropdown.Header>
+        <Dropdown.Item>Status</Dropdown.Item>
+        <Dropdown.Item>Cancellations</Dropdown.Item> */}
+      </Dropdown.Menu>
+    </Dropdown>
 
       <Menu.Item position="right">
         <Button as="a" primary style={{ marginLeft: "0.5em" }}>
