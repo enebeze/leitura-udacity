@@ -4,6 +4,7 @@ import CommentPost from "./../components/CommentPost";
 import Footer from "./../components/Footer";
 import MyHeader from "./../components/Header";
 import NewPost from "./../components/NewPost";
+import { Link } from "react-router-dom";
 
 import {
   Container,
@@ -28,39 +29,57 @@ const options = [
   { key: "f", text: "Female", value: "female" }
 ];
 
-const friendOptions = [
-  {
-    text: "All",
-    value: "All"
-  },
-  {
-    text: "react",
-    value: "react"
-  },
-  {
-    text: "redux",
-    value: "redux"
-  },
-  {
-    text: "udacity",
-    value: "udacty"
-  }
-];
-
 class Home extends Component {
   state = {
     showModal: false,
-    posts: []
+    posts: [],
+    categories: []
   };
 
   componentDidMount() {
-    fetch("http://localhost:3001/posts/", {
+    this.getPosts();
+
+    this.getAllCategories();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { match: { params } } = nextProps;
+
+    const category = params.category;
+
+    this.getPosts(category);
+  }
+
+  getAllCategories = () => {
+    fetch("http://localhost:3001/categories/", {
+      method: "GET",
+      headers: { Authorization: "v1" }
+    }).then(result => {
+      result.json().then(c => {
+        const categories = [];
+        categories.push({ text: "All", value: "" });
+        c.categories.map(cat => {
+          categories.push({ text: cat.name, value: cat.path });
+        });
+
+        this.setState({ categories });
+      });
+    });
+  };
+
+  getPosts = (category) => {
+    
+
+    let url = category
+      ? `http://localhost:3001/${category}/posts`
+      : "http://localhost:3001/posts";
+    fetch(url, {
       method: "GET",
       headers: { Authorization: "v1" }
     }).then(result => {
       result.json().then(posts => this.setState({ posts }));
     });
-  }
+  };
 
   changeModal = () => {
     this.setState({ showModal: !this.state.showModal });
@@ -71,7 +90,7 @@ class Home extends Component {
   };
 
   render() {
-    const { posts } = this.state;
+    const { posts, categories } = this.state;
     return (
       <div>
         <MyHeader />
@@ -94,16 +113,24 @@ class Home extends Component {
           <div
             style={{
               paddingTop: 20,
-              paddingBottom: 40,
+              paddingBottom: 40
             }}
           >
             <Header as="h5" floated="left">
-              Categories by <Dropdown inline options={friendOptions} />
+              Categories by{" "}
+              <Dropdown
+                inline
+                options={categories}
+                onChange={(e, d) => {
+                  const { history } = this.props;
+                  history.push(`/${d.value}`);
+                  //this.getPosts(d.value);
+                }}
+              />
             </Header>
             <Header as="h5" floated="right">
-              Order by <Dropdown inline options={friendOptions} />
+              Order by <Dropdown inline options={categories} />
             </Header>
-
           </div>
 
           {posts.map(p => (

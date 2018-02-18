@@ -11,6 +11,8 @@ import {
   Icon
 } from "semantic-ui-react";
 
+import { Link } from 'react-router-dom';
+
 import CommentPost from "./../CommentPost";
 import { Divider } from "semantic-ui-react";
 
@@ -42,7 +44,9 @@ class Post extends Component {
         <Item.Group>
           <Item>
             <Item.Content>
-              <Item.Header as="a">{title}</Item.Header>
+              <Item.Header>
+                <Link to={`details/${id}`} style={{ color: '#000' }} >{title}</Link>
+              </Item.Header>
               <Item.Meta>by {author}</Item.Meta>
               <Item.Description>
                 {/* <Image src="/images/short-paragraph.png" /> */}
