@@ -4,12 +4,14 @@
   "private": true,
   "dependencies": {
     "antd": "^3.1.6",
+    "lodash": "^4.17.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.0",
     "semantic-ui-css": "^2.2.14",
-    "semantic-ui-react": "^0.77.2"
+    "semantic-ui-react": "^0.77.2",
+    "timeago-react": "^2.0.0"
   },
   "scripts": {
     "start": "react-app-rewired start",

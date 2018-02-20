@@ -37,17 +37,19 @@ class Home extends Component {
   };
 
   componentDidMount() {
-    this.getPosts();
+    
+    const { match: { params } } = this.props;
+
+    this.getPosts(params.category);
 
     this.getAllCategories();
   }
+  
 
   componentWillReceiveProps(nextProps) {
     const { match: { params } } = nextProps;
 
-    const category = params.category;
-
-    this.getPosts(category);
+    this.getPosts(params.category);
   }
 
   getAllCategories = () => {
@@ -91,6 +93,7 @@ class Home extends Component {
 
   render() {
     const { posts, categories } = this.state;
+    { console.log(posts); }
     return (
       <div>
         <MyHeader />
@@ -132,7 +135,7 @@ class Home extends Component {
               Order by <Dropdown inline options={categories} />
             </Header>
           </div>
-
+                  
           {posts.map(p => (
             <Post
               key={p.id}
@@ -143,6 +146,7 @@ class Home extends Component {
               category={p.category}
               hasComment={p.commentCount > 0}
               voteScore={p.voteScore}
+              timestamp={p.timestamp}
             />
           ))}
         </Container>

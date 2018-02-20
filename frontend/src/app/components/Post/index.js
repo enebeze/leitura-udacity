@@ -8,10 +8,13 @@ import {
   Button,
   Label,
   Menu,
-  Icon
+  Icon,
+  Container,
+  Dropdown
 } from "semantic-ui-react";
+import TimeAgo from 'timeago-react';
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 import CommentPost from "./../CommentPost";
 import { Divider } from "semantic-ui-react";
@@ -31,9 +34,19 @@ class Post extends Component {
   }
 
   render() {
-    const { id, title, author, description, category, hasComment, voteScore } = this.props;
+    const {
+      id,
+      title,
+      author,
+      description,
+      category,
+      hasComment,
+      voteScore,
+      timestamp
+    } = this.props;
     const { comments } = this.state;
     const colorScore = voteScore > -1 ? "green" : "red";
+
     return (
       <div
         style={{
@@ -45,37 +58,56 @@ class Post extends Component {
           <Item>
             <Item.Content>
               <Item.Header>
-                <Link to={`details/${id}`} style={{ color: '#000' }} >{title}</Link>
+                <Link to={`details/${id}`} style={{ color: "#000" }}>
+                  {title}
+                </Link>
               </Item.Header>
-              <Item.Meta>by {author}</Item.Meta>
-              <Item.Description>
-                {/* <Image src="/images/short-paragraph.png" /> */}
-                {description}
-              </Item.Description>
+              
+              <Item.Meta>
+                by { `author ${" "}` } 
+                <span style={{ fontSize: "x-small" }}> 
+                  <TimeAgo datetime={timestamp} /> 
+                  {/* { timeago().format(new Date(timestamp) ) }  */}
+                </span>
+              </Item.Meta>
+              <Item.Description>{description}</Item.Description>
               <Item.Extra>
-              <Button size="mini" as="div" labelPosition="right">
-                <Button.Group size="mini">
-                  <Button size="mini" color="green">
-                    <Icon name="like outline" />
-                    Like
-                  </Button>
-                  <Button.Or text={voteScore} />
-                  <Button size="mini" color="red">
-                    <Icon name="dislike outline" />
-                    Not like
-                  </Button>
-                </Button.Group>
-                {/* <Label as="a" basic color={colorScore} pointing="left">
+                <Button size="mini" as="div" labelPosition="right">
+                  <Button.Group size="mini">
+                    <Button size="mini" color="green">
+                      <Icon name="like outline" />
+                      Like
+                    </Button>
+                    <Button.Or text={voteScore} />
+                    <Button size="mini" color="red">
+                      <Icon name="dislike outline" />
+                      Not like
+                    </Button>
+                  </Button.Group>
+                  {/* <Label as="a" basic color={colorScore} pointing="left">
                   {voteScore}
                 </Label> */}
-              </Button>
+                </Button>
               </Item.Extra>
               <Item.Extra>
                 <Label color="teal" size="tiny">
                   {category}
                 </Label>
               </Item.Extra>
-              
+            </Item.Content>
+
+            <Item.Content style={{ textAlign: "right" }}>
+              {/* <Button.Group floated="right" basic size="mini">
+                  <Button icon="edit" />
+                  <Button icon="delete" />
+                </Button.Group> */}
+
+              <Dropdown icon="block layout">
+                <Dropdown.Menu>
+                  <Dropdown.Item icon="edit" text="Edit" />
+                  <Dropdown.Item icon="delete" text="Delete" />
+                </Dropdown.Menu>
+              </Dropdown>
             </Item.Content>
           </Item>
         </Item.Group>

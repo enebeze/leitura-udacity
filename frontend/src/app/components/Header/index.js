@@ -22,9 +22,6 @@ const Header = () => (
         <Dropdown.Item>redux</Dropdown.Item>
         <Dropdown.Item>udacity</Dropdown.Item>
         <Dropdown.Divider />
-        {/* <Dropdown.Header>Order</Dropdown.Header>
-        <Dropdown.Item>Status</Dropdown.Item>
-        <Dropdown.Item>Cancellations</Dropdown.Item> */}
       </Dropdown.Menu>
     </Dropdown>
 

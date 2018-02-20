@@ -1,5 +1,5 @@
 import React from "react";
-
+import TimeAgo from 'timeago-react';
 import { Comment, Header, Form, Button } from 'semantic-ui-react';
 
 const CommentPost = ({ author, date, text, }) => (
@@ -16,10 +16,7 @@ const CommentPost = ({ author, date, text, }) => (
         <Comment.Content>
           <Comment.Author as="a">{author}</Comment.Author>
           <Comment.Metadata>
-            <div>
-              {/* Today at 5:42PM */}
-              {new Date(date).toDateString()}
-            </div>
+              <TimeAgo datetime={date} />
           </Comment.Metadata>
           <Comment.Text>{text}</Comment.Text>
           {/* <Comment.Actions>
