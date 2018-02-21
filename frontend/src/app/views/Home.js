@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import _ from 'lodash';
 import Post from "./../components/Post";
 import CommentPost from "./../components/CommentPost";
 import Footer from "./../components/Footer";
 import MyHeader from "./../components/Header";
-import NewPost from "./../components/NewPost";
+import FormPost from "./../components/FormPost";
 import { Link } from "react-router-dom";
 
 import {
@@ -24,16 +25,18 @@ import {
   TextArea
 } from "semantic-ui-react";
 
-const options = [
-  { key: "m", text: "Male", value: "male" },
-  { key: "f", text: "Female", value: "female" }
+const orderOptions = [
+  { key: "d", text: "Date", value: "timestamp" },
+  { key: "p", text: "Score", value: "voteScore" }
 ];
+
 
 class Home extends Component {
   state = {
     showModal: false,
     posts: [],
-    categories: []
+    categories: [],
+    postEdit: null
   };
 
   componentDidMount() {
@@ -91,9 +94,19 @@ class Home extends Component {
     this.changeModal();
   };
 
+  editPost = (postEdit) => {
+    this.setState({ postEdit });
+    this.changeModal();
+  }
+
+  orderPostsBy = (order) => {
+    const posts = _.orderBy(this.state.posts, order, "desc");
+    this.setState({ posts }, console.log(this.state.posts));
+  }
+
   render() {
     const { posts, categories } = this.state;
-    { console.log(posts); }
+
     return (
       <div>
         <MyHeader />
@@ -132,30 +145,29 @@ class Home extends Component {
               />
             </Header>
             <Header as="h5" floated="right">
-              Order by <Dropdown inline options={categories} />
+              Order by {" "}
+              <Dropdown inline options={orderOptions} 
+                onChange={(e, d) => {
+                  this.orderPostsBy(d.value);
+                }}
+              />
             </Header>
           </div>
                   
           {posts.map(p => (
             <Post
               key={p.id}
-              id={p.id}
-              title={p.title}
-              author={p.author}
-              description={p.body}
-              category={p.category}
-              hasComment={p.commentCount > 0}
-              voteScore={p.voteScore}
-              timestamp={p.timestamp}
+              post={p}
+              editPost={this.editPost}
             />
           ))}
         </Container>
         <Footer />
 
-        <NewPost
+        <FormPost
           showModal={this.state.showModal}
           changeModal={this.changeModal}
-          addNewPost={this.addNewPost}
+          post={this.state.postEdit}
         />
       </div>
     );

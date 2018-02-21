@@ -1,63 +1,73 @@
-import React from "react";
-import TimeAgo from 'timeago-react';
-import { Comment, Header, Form, Button } from 'semantic-ui-react';
+import React, { Component } from "react";
+import TimeAgo from "timeago-react";
+import { Comment, Header, Form, Button, Icon } from "semantic-ui-react";
 
-const CommentPost = ({ author, date, text, }) => (
-  <div>
-    {/* <Comment.Group size="mini" style={{
-      paddingTop: 20
-    }} >
-      <Header as="h3" dividing>
-        Comments
-      </Header> */}
+class CommentPost extends Component {
 
-      <Comment>
-        {/* <Comment.Avatar src="/images/avatar/small/matt.jpg" /> */}
-        <Comment.Content>
-          <Comment.Author as="a">{author}</Comment.Author>
-          <Comment.Metadata>
-              <TimeAgo datetime={date} />
-          </Comment.Metadata>
-          <Comment.Text>{text}</Comment.Text>
-          {/* <Comment.Actions>
-            <Comment.Action>Reply</Comment.Action>
-          </Comment.Actions> */}
-        </Comment.Content>
-      </Comment>
+  state = {
+    comment: {}
+  }
 
-      {/* <Comment>
-        <Comment.Avatar src="/images/avatar/small/elliot.jpg" />
-        <Comment.Content>
-          <Comment.Author as="a">Elliot Fu</Comment.Author>
-          <Comment.Metadata>
-            <div>Yesterday at 12:30AM</div>
-          </Comment.Metadata>
-          <Comment.Text>
-            <p>This has been very useful for my research. Thanks as well!</p>
-          </Comment.Text>
-          <Comment.Actions>
-            <Comment.Action>Reply</Comment.Action>
-          </Comment.Actions>
-        </Comment.Content>
-      </Comment> */}
+  componentDidMount() {
+    this.setState({ comment: this.props.comment });
+  }
 
-      {/* <Comment>
-        <Comment.Avatar src="/images/avatar/small/joe.jpg" />
-        <Comment.Content>
-          <Comment.Author as="a">Joe Henderson</Comment.Author>
-          <Comment.Metadata>
-            <div>5 days ago</div>
-          </Comment.Metadata>
-          <Comment.Text>Dude, this is awesome. Thanks so much</Comment.Text>
-          <Comment.Actions>
-            <Comment.Action>Reply</Comment.Action>
-          </Comment.Actions>
-        </Comment.Content>
-      </Comment> */}
+  likeNotLike = (value) => {
+    debugger
+    fetch(`http://localhost:3001/comments/${this.state.comment.id}`, {
+      method: "POST",
+      headers: {
+        Authorization: "v1",
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ option: value })
+    }).then(result => {
+      this.setState(prevState => {
+        const { comment } = prevState;
+        comment.voteScore = comment.voteScore + (value === "upVote" ? 1 : -1)
+        return comment;
+      })
+    });
 
-      
-    {/* </Comment.Group> */}
-  </div>
-);
+  }
 
-export default CommentPost
+  render() {
+    const { author, timestamp, body, voteScore } = this.state.comment;
+    return (
+      <div>
+        <Comment
+          style={{
+            paddingBottom: 10,
+          }}
+        >
+          {/* <Comment.Avatar src="/images/avatar/small/matt.jpg" /> */}
+          <Comment.Content>
+            <Comment.Author as="a">{author}</Comment.Author>
+            <Comment.Metadata>
+              <TimeAgo datetime={timestamp} />
+              <div>
+                <Icon name="star" />
+                {voteScore}
+              </div>
+              <Comment.Actions>
+                <Comment.Action onClick={() => { this.likeNotLike("upVote") }} >
+                  <Icon name="like outline" />
+                </Comment.Action>
+                <Comment.Action onClick={() => { this.likeNotLike("downVote") }} >
+                  <Icon name="dislike outline" />
+                </Comment.Action>
+              </Comment.Actions>
+            </Comment.Metadata>
+            <Comment.Text>{body}</Comment.Text>
+            <Comment.Actions>
+              <Comment.Action>Edit</Comment.Action>
+              <Comment.Action>Delete</Comment.Action>
+            </Comment.Actions>
+          </Comment.Content>
+        </Comment>
+      </div>
+    );
+  }
+}
+
+export default CommentPost;

@@ -21,15 +21,77 @@ import { Divider } from "semantic-ui-react";
 
 class Post extends Component {
   state = {
-    comments: []
+    post: {},
+    comments: [],
+    bodyComment: "",
   };
 
   componentDidMount() {
-    fetch(`http://localhost:3001/posts/${this.props.id}/comments`, {
+
+    this.setState({ post: this.props.post });
+
+    fetch(`http://localhost:3001/posts/${this.props.post.id}/comments`, {
       method: "GET",
       headers: { Authorization: "v1" }
     }).then(result => {
       result.json().then(comments => this.setState({ comments }));
+    });
+  }
+
+  likeNotLike = (value) => {
+    fetch(`http://localhost:3001/posts/${this.state.post.id}`, {
+      method: "POST",
+      headers: {
+        Authorization: "v1",
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ option: value })
+    }).then(result => {
+      this.setState(prevState => {
+        const { post } = prevState;
+        post.voteScore = post.voteScore + (value === "upVote" ? 1 : -1)
+        return post;
+      })
+    });
+  }
+
+  S4 = () => {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  };
+
+  generateGuid = () => {
+    return (
+      this.S4() +
+      this.S4() +
+      this.S4() +
+      this.S4().substr(0, 3)
+    ).toLowerCase();
+  };
+
+
+  addNewComment = () => {
+    const comment = {
+      id: this.generateGuid(),
+      timestamp: Date.now(),
+      body: this.state.bodyComment,
+      author: "enebeze",
+      parentId: this.state.post.id
+    }
+
+    fetch("http://localhost:3001/comments", {
+      method: "POST",
+      headers: {
+        Authorization: "v1",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(comment)
+    }).then(() => {
+      this.setState(prevState => {
+        const { comments } = prevState;
+        comment.voteScore = 1;
+        comments.push(comment);
+        return comments;
+      })
     });
   }
 
@@ -38,15 +100,16 @@ class Post extends Component {
       id,
       title,
       author,
-      description,
+      body,
       category,
-      hasComment,
       voteScore,
-      timestamp
-    } = this.props;
+      timestamp,
+      commentCount
+    } = this.state.post;
+    
     const { comments } = this.state;
+    const hasComment = comments.length > 0
     const colorScore = voteScore > -1 ? "green" : "red";
-
     return (
       <div
         style={{
@@ -70,23 +133,20 @@ class Post extends Component {
                   {/* { timeago().format(new Date(timestamp) ) }  */}
                 </span>
               </Item.Meta>
-              <Item.Description>{description}</Item.Description>
+              <Item.Description>{body}</Item.Description>
               <Item.Extra>
                 <Button size="mini" as="div" labelPosition="right">
                   <Button.Group size="mini">
-                    <Button size="mini" color="green">
+                    <Button size="mini" color="green" onClick={() => { this.likeNotLike("upVote") } } >
                       <Icon name="like outline" />
                       Like
                     </Button>
                     <Button.Or text={voteScore} />
-                    <Button size="mini" color="red">
+                    <Button size="mini" color="red" onClick={() => { this.likeNotLike("downVote") } } >
                       <Icon name="dislike outline" />
                       Not like
                     </Button>
                   </Button.Group>
-                  {/* <Label as="a" basic color={colorScore} pointing="left">
-                  {voteScore}
-                </Label> */}
                 </Button>
               </Item.Extra>
               <Item.Extra>
@@ -97,14 +157,11 @@ class Post extends Component {
             </Item.Content>
 
             <Item.Content style={{ textAlign: "right" }}>
-              {/* <Button.Group floated="right" basic size="mini">
-                  <Button icon="edit" />
-                  <Button icon="delete" />
-                </Button.Group> */}
-
               <Dropdown icon="block layout">
                 <Dropdown.Menu>
-                  <Dropdown.Item icon="edit" text="Edit" />
+                  <Dropdown.Item icon="edit" text="Edit"
+                    onClick={() => this.props.editPost(this.state.post)}
+                   />
                   <Dropdown.Item icon="delete" text="Delete" />
                 </Dropdown.Menu>
               </Dropdown>
@@ -131,17 +188,15 @@ class Post extends Component {
           {comments.map(c => (
             <CommentPost
               key={c.id}
-              author={c.author}
-              text={c.body}
-              date={c.timestamp}
+              comment={c}
             />
           ))}
-          {/* <CommentPost /> */}
 
           <Form reply>
             <Form.TextArea
               placeholder="Comment"
               style={{ height: 80, minHeight: 80 }}
+              onChange={(e, { value }) => this.setState({ bodyComment: value })}
             />
             <Button
               content="Add Comment"
@@ -149,6 +204,7 @@ class Post extends Component {
               icon="edit"
               primary
               size="mini"
+              onClick={this.addNewComment}
             />
             <Divider />
           </Form>
