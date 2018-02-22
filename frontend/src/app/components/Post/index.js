@@ -12,7 +12,7 @@ import {
   Container,
   Dropdown
 } from "semantic-ui-react";
-import TimeAgo from 'timeago-react';
+import TimeAgo from "timeago-react";
 
 import { Link } from "react-router-dom";
 
@@ -23,11 +23,10 @@ class Post extends Component {
   state = {
     post: {},
     comments: [],
-    bodyComment: "",
+    bodyComment: ""
   };
 
   componentDidMount() {
-
     this.setState({ post: this.props.post });
 
     fetch(`http://localhost:3001/posts/${this.props.post.id}/comments`, {
@@ -38,22 +37,22 @@ class Post extends Component {
     });
   }
 
-  likeNotLike = (value) => {
+  likeNotLike = value => {
     fetch(`http://localhost:3001/posts/${this.state.post.id}`, {
       method: "POST",
       headers: {
         Authorization: "v1",
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({ option: value })
     }).then(result => {
       this.setState(prevState => {
         const { post } = prevState;
-        post.voteScore = post.voteScore + (value === "upVote" ? 1 : -1)
+        post.voteScore = post.voteScore + (value === "upVote" ? 1 : -1);
         return post;
-      })
+      });
     });
-  }
+  };
 
   S4 = () => {
     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -68,7 +67,6 @@ class Post extends Component {
     ).toLowerCase();
   };
 
-
   addNewComment = () => {
     const comment = {
       id: this.generateGuid(),
@@ -76,7 +74,7 @@ class Post extends Component {
       body: this.state.bodyComment,
       author: "enebeze",
       parentId: this.state.post.id
-    }
+    };
 
     fetch("http://localhost:3001/comments", {
       method: "POST",
@@ -91,9 +89,18 @@ class Post extends Component {
         comment.voteScore = 1;
         comments.push(comment);
         return comments;
-      })
+      });
     });
-  }
+  };
+
+  deletePost = () => {
+    fetch(`http://localhost:3001/posts/${this.state.post.id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: "v1"
+      }
+    });
+  };
 
   render() {
     const {
@@ -106,10 +113,11 @@ class Post extends Component {
       timestamp,
       commentCount
     } = this.state.post;
-    
+
     const { comments } = this.state;
-    const hasComment = comments.length > 0
+    const hasComment = comments.length > 0;
     const colorScore = voteScore > -1 ? "green" : "red";
+
     return (
       <div
         style={{
@@ -125,11 +133,11 @@ class Post extends Component {
                   {title}
                 </Link>
               </Item.Header>
-              
+
               <Item.Meta>
-                by { `author ${" "}` } 
-                <span style={{ fontSize: "x-small" }}> 
-                  <TimeAgo datetime={timestamp} /> 
+                 {`by ${author} `}
+                <span style={{ fontSize: "x-small" }}>
+                  <TimeAgo datetime={timestamp} />
                   {/* { timeago().format(new Date(timestamp) ) }  */}
                 </span>
               </Item.Meta>
@@ -137,12 +145,24 @@ class Post extends Component {
               <Item.Extra>
                 <Button size="mini" as="div" labelPosition="right">
                   <Button.Group size="mini">
-                    <Button size="mini" color="green" onClick={() => { this.likeNotLike("upVote") } } >
+                    <Button
+                      size="mini"
+                      color="green"
+                      onClick={() => {
+                        this.likeNotLike("upVote");
+                      }}
+                    >
                       <Icon name="like outline" />
                       Like
                     </Button>
                     <Button.Or text={voteScore} />
-                    <Button size="mini" color="red" onClick={() => { this.likeNotLike("downVote") } } >
+                    <Button
+                      size="mini"
+                      color="red"
+                      onClick={() => {
+                        this.likeNotLike("downVote");
+                      }}
+                    >
                       <Icon name="dislike outline" />
                       Not like
                     </Button>
@@ -159,10 +179,12 @@ class Post extends Component {
             <Item.Content style={{ textAlign: "right" }}>
               <Dropdown icon="block layout">
                 <Dropdown.Menu>
-                  <Dropdown.Item icon="edit" text="Edit"
+                  <Dropdown.Item
+                    icon="edit"
+                    text="Edit"
                     onClick={() => this.props.editPost(this.state.post)}
-                   />
-                  <Dropdown.Item icon="delete" text="Delete" />
+                  />
+                  <Dropdown.Item icon="delete" text="Delete" onClick={this.deletePost} />
                 </Dropdown.Menu>
               </Dropdown>
             </Item.Content>
@@ -185,12 +207,7 @@ class Post extends Component {
             </Header>
           )}
 
-          {comments.map(c => (
-            <CommentPost
-              key={c.id}
-              comment={c}
-            />
-          ))}
+          {comments.map(c => <CommentPost key={c.id} comment={c} />)}
 
           <Form reply>
             <Form.TextArea

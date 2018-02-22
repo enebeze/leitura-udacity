@@ -39,11 +39,10 @@ class CommentPost extends Component {
   };
 
   updateComment = () => {
-
     const c = {
       timestamp: Date.now(),
       body: this.state.bodyEdit
-    }
+    };
 
     fetch(`http://localhost:3001/comments/${this.state.comment.id}`, {
       method: "PUT",
@@ -55,13 +54,13 @@ class CommentPost extends Component {
     }).then(result => {
       this.setState(prevState => {
         const { comment } = prevState;
-        comment.body = c.body
-        comment.timestamp = c.timestamp
+        comment.body = c.body;
+        comment.timestamp = c.timestamp;
         return comment;
       });
       this.cancelEdit();
     });
-  }
+  };
 
   deleteComment = () => {
     fetch(`http://localhost:3001/comments/${this.state.comment.id}`, {
@@ -69,10 +68,8 @@ class CommentPost extends Component {
       headers: {
         Authorization: "v1"
       }
-    }).then(result => {
-      
     });
-  }
+  };
 
   render() {
     const { author, timestamp, body, voteScore } = this.state.comment;
@@ -114,13 +111,21 @@ class CommentPost extends Component {
                 <Form.TextArea
                   placeholder="Comment"
                   value={this.state.bodyEdit}
-                  style={{ marginTop: 8, marginBottom: 6, height: 50, minHeight: 50, width: 300 }}
+                  style={{
+                    marginTop: 8,
+                    marginBottom: 6,
+                    height: 50,
+                    minHeight: 50,
+                    width: 300
+                  }}
                   onChange={(e, { value }) =>
                     this.setState({ bodyEdit: value })
                   }
                 />
                 <Comment.Actions>
-                  <Comment.Action onClick={this.updateComment} >Save</Comment.Action>
+                  <Comment.Action onClick={this.updateComment}>
+                    Save
+                  </Comment.Action>
                   <Comment.Action onClick={this.cancelEdit}>
                     Cancel
                   </Comment.Action>
@@ -133,7 +138,9 @@ class CommentPost extends Component {
                   <Comment.Action onClick={this.editComment}>
                     Edit
                   </Comment.Action>
-                  <Comment.Action onClick={this.deleteComment} >Delete</Comment.Action>
+                  <Comment.Action onClick={this.deleteComment}>
+                    Delete
+                  </Comment.Action>
                 </Comment.Actions>
               </div>
             )}

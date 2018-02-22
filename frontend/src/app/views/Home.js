@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import _ from 'lodash';
+import _ from "lodash";
 import Post from "./../components/Post";
 import CommentPost from "./../components/CommentPost";
 import Footer from "./../components/Footer";
@@ -22,14 +22,14 @@ import {
   Comment,
   Form,
   Select,
-  TextArea
+  TextArea,
+  Message
 } from "semantic-ui-react";
 
 const orderOptions = [
   { key: "d", text: "Date", value: "timestamp" },
   { key: "p", text: "Score", value: "voteScore" }
 ];
-
 
 class Home extends Component {
   state = {
@@ -40,14 +40,12 @@ class Home extends Component {
   };
 
   componentDidMount() {
-    
     const { match: { params } } = this.props;
 
     this.getPosts(params.category);
 
     this.getAllCategories();
   }
-  
 
   componentWillReceiveProps(nextProps) {
     const { match: { params } } = nextProps;
@@ -72,9 +70,7 @@ class Home extends Component {
     });
   };
 
-  getPosts = (category) => {
-    
-
+  getPosts = category => {
     let url = category
       ? `http://localhost:3001/${category}/posts`
       : "http://localhost:3001/posts";
@@ -86,18 +82,18 @@ class Home extends Component {
     });
   };
 
-  changeModal = (postEdit) => {
+  changeModal = postEdit => {
     this.setState({ showModal: !this.state.showModal, postEdit });
   };
 
-  editPost = (postEdit) => {
+  editPost = postEdit => {
     this.changeModal(postEdit);
-  }
+  };
 
-  orderPostsBy = (order) => {
+  orderPostsBy = order => {
     const posts = _.orderBy(this.state.posts, order, "desc");
     this.setState({ posts }, console.log(this.state.posts));
-  }
+  };
 
   render() {
     const { posts, categories } = this.state;
@@ -108,8 +104,13 @@ class Home extends Component {
 
         <Container text style={{ marginTop: "7em" }}>
           <div>
-            <Button basic color="blue" fluid onClick={() => this.changeModal(null) }>
-              New post
+            <Button
+              basic
+              color="blue"
+              fluid
+              onClick={() => this.changeModal(null)}
+            >
+              New Post
             </Button>
           </div>
           {/* 
@@ -120,42 +121,48 @@ class Home extends Component {
                     single column layouts.
                 </p> 
             */}
-
-          <div
-            style={{
-              paddingTop: 20,
-              paddingBottom: 40
-            }}
-          >
-            <Header as="h5" floated="left">
-              Categories by{" "}
-              <Dropdown
-                inline
-                options={categories}
-                onChange={(e, d) => {
-                  const { history } = this.props;
-                  history.push(`/${d.value}`);
-                  //this.getPosts(d.value);
-                }}
-              />
-            </Header>
-            <Header as="h5" floated="right">
-              Order by {" "}
-              <Dropdown inline options={orderOptions} 
-                onChange={(e, d) => {
-                  this.orderPostsBy(d.value);
-                }}
-              />
-            </Header>
-          </div>
-                  
-          {posts.map(p => (
-            <Post
-              key={p.id}
-              post={p}
-              editPost={this.editPost}
+            <div
+              style={{
+                paddingTop: 20,
+                paddingBottom: 40
+              }}
+            >
+              <Header as="h5" floated="left">
+                Categories by{" "}
+                <Dropdown
+                  inline
+                  options={categories}
+                  onChange={(e, d) => {
+                    const { history } = this.props;
+                    history.push(`/${d.value}`);
+                    //this.getPosts(d.value);
+                  }}
+                />
+              </Header>
+              <Header as="h5" floated="right">
+                Order by{" "}
+                <Dropdown
+                  inline
+                  options={orderOptions}
+                  onChange={(e, d) => {
+                    this.orderPostsBy(d.value);
+                  }}
+                />
+              </Header>
+            </div>
+          {posts.length == 0 && (
+            <Message
+              icon='hand pointer'
+              color="blue"
+              header="No posts added"
+              content="Please click on New Post to add the first post"
             />
+          )}
+
+          {posts.map(p => (
+            <Post key={p.id} post={p} editPost={this.editPost} />
           ))}
+          
         </Container>
         <Footer />
 
