@@ -5,6 +5,8 @@ import { Modal } from "antd";
 import { Form, Select, TextArea, Dropdown } from "semantic-ui-react";
 import { isNull } from "util";
 
+const initialState = {};
+
 class FormPost extends Component {
   state = {
     titleModal: "New Post",
@@ -21,8 +23,8 @@ class FormPost extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    //if (!isNull(nextProps.post)) {
-      const { title, author, category, body, id } = nextProps.post || {};
+    if (!isNull(nextProps.post)) {
+      const { title, author, category, body, id } = nextProps.post;
       this.setState({
         title,
         author,
@@ -31,7 +33,7 @@ class FormPost extends Component {
         id,
         titleModal: id ? "Edit Post" : "New Post"
       });
-    //}
+    }
   }
 
   getAllCategories = () => {
@@ -72,7 +74,7 @@ class FormPost extends Component {
   };
 
   savePost = () => {
-    if (this.state.id === null) {
+    if (!this.state.id) {
       this.addPost();
     } else {
       this.editPost();
@@ -115,6 +117,17 @@ class FormPost extends Component {
     });
   };
 
+  onCancel = () => {
+    this.setState({
+      title: "",
+      author: "",
+      category: "",
+      body: "",
+      id: null
+    });
+    this.props.changeModal(null);
+  };
+
   render() {
     const { categories } = this.state;
 
@@ -123,7 +136,7 @@ class FormPost extends Component {
         title={this.state.titleModal}
         visible={this.props.showModal}
         onOk={this.savePost}
-        onCancel={this.props.changeModal}
+        onCancel={this.onCancel}
       >
         <Form>
           <Form.Field>
@@ -135,6 +148,7 @@ class FormPost extends Component {
           </Form.Field>
           <Form.Field>
             <input
+              disabled={this.state.id ? true : false}
               placeholder="Author"
               value={this.state.author}
               onChange={event => this.setState({ author: event.target.value })}
@@ -142,6 +156,7 @@ class FormPost extends Component {
           </Form.Field>
           <Form.Field>
             <Dropdown
+              disabled={this.state.id ? true : false}
               value={this.state.category}
               onChange={(e, { value }) => this.setState({ category: value })}
               placeholder="Category"

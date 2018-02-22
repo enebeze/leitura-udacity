@@ -86,17 +86,12 @@ class Home extends Component {
     });
   };
 
-  changeModal = () => {
-    this.setState({ showModal: !this.state.showModal });
-  };
-
-  addNewPost = () => {
-    this.changeModal();
+  changeModal = (postEdit) => {
+    this.setState({ showModal: !this.state.showModal, postEdit });
   };
 
   editPost = (postEdit) => {
-    this.setState({ postEdit });
-    this.changeModal();
+    this.changeModal(postEdit);
   }
 
   orderPostsBy = (order) => {
@@ -113,7 +108,7 @@ class Home extends Component {
 
         <Container text style={{ marginTop: "7em" }}>
           <div>
-            <Button basic color="blue" fluid onClick={this.changeModal}>
+            <Button basic color="blue" fluid onClick={() => this.changeModal(null) }>
               New post
             </Button>
           </div>
