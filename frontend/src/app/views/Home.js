@@ -179,7 +179,7 @@ class Home extends Component {
           )}
 
           {posts.map(p => (
-            <Post key={p.id} post={p} editPost={this.editPost} />
+            <Post key={p.id} post={p} editPost={this.editPost} isDetailsPage={this.state.isDetailsPage} />
           ))}
 
           {this.state.isDetailsPage && (

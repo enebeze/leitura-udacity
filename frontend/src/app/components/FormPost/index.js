@@ -123,7 +123,8 @@ class FormPost extends Component {
       author: "",
       category: "",
       body: "",
-      id: null
+      id: null,
+      titleModal: "New Post"
     });
     this.props.changeModal(null);
   };

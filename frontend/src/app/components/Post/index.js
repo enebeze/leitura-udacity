@@ -88,7 +88,7 @@ class Post extends Component {
         const { comments } = prevState;
         comment.voteScore = 1;
         comments.push(comment);
-        prevState.bodyComment = ""
+        prevState.bodyComment = "";
         return prevState;
       });
     });
@@ -118,7 +118,7 @@ class Post extends Component {
     const { comments } = this.state;
     const hasComment = comments.length > 0;
     const colorScore = voteScore > -1 ? "green" : "red";
-
+    const isDetailsPage = this.props.isDetailsPage;
     return (
       <div
         style={{
@@ -136,7 +136,7 @@ class Post extends Component {
               </Item.Header>
 
               <Item.Meta>
-                 {`by ${author} `}
+                {`by ${author} `}
                 <span style={{ fontSize: "x-small" }}>
                   <TimeAgo datetime={timestamp} />
                   {/* { timeago().format(new Date(timestamp) ) }  */}
@@ -185,7 +185,11 @@ class Post extends Component {
                     text="Edit"
                     onClick={() => this.props.editPost(this.state.post)}
                   />
-                  <Dropdown.Item icon="delete" text="Delete" onClick={this.deletePost} />
+                  <Dropdown.Item
+                    icon="delete"
+                    text="Delete"
+                    onClick={this.deletePost}
+                  />
                 </Dropdown.Menu>
               </Dropdown>
             </Item.Content>
@@ -209,24 +213,27 @@ class Post extends Component {
           )}
 
           {comments.map(c => <CommentPost key={c.id} comment={c} />)}
-
-          <Form reply>
-            <Form.TextArea
-              placeholder="Comment"
-              style={{ height: 80, minHeight: 80 }}
-              value={this.state.bodyComment}
-              onChange={(e, { value }) => this.setState({ bodyComment: value })}
-            />
-            <Button
-              content="Add Comment"
-              labelPosition="left"
-              icon="edit"
-              primary
-              size="mini"
-              onClick={this.addNewComment}
-            />
-            <Divider />
-          </Form>
+          {isDetailsPage && (
+            <Form reply>
+              <Form.TextArea
+                placeholder="Comment"
+                style={{ height: 80, minHeight: 80 }}
+                value={this.state.bodyComment}
+                onChange={(e, { value }) =>
+                  this.setState({ bodyComment: value })
+                }
+              />
+              <Button
+                content="Add Comment"
+                labelPosition="left"
+                icon="edit"
+                primary
+                size="mini"
+                onClick={this.addNewComment}
+              />
+              <Divider />
+            </Form>
+          )}
         </Comment.Group>
       </div>
     );
