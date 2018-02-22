@@ -88,7 +88,8 @@ class Post extends Component {
         const { comments } = prevState;
         comment.voteScore = 1;
         comments.push(comment);
-        return comments;
+        prevState.bodyComment = ""
+        return prevState;
       });
     });
   };
@@ -129,7 +130,7 @@ class Post extends Component {
           <Item>
             <Item.Content>
               <Item.Header>
-                <Link to={`details/${id}`} style={{ color: "#000" }}>
+                <Link to={`/${category}/${id}`} style={{ color: "#000" }}>
                   {title}
                 </Link>
               </Item.Header>
@@ -213,6 +214,7 @@ class Post extends Component {
             <Form.TextArea
               placeholder="Comment"
               style={{ height: 80, minHeight: 80 }}
+              value={this.state.bodyComment}
               onChange={(e, { value }) => this.setState({ bodyComment: value })}
             />
             <Button

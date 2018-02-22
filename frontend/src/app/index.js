@@ -7,7 +7,7 @@ import FormPost from "./components/FormPost";
 export default () => (
   <BrowserRouter>
     <div>
-      <Route path="/:category?/:id?" component={Home} />
+      <Route path="/:category?/:post_id?" component={Home} />
     </div>
   </BrowserRouter>
 );

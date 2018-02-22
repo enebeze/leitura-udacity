@@ -23,7 +23,8 @@ import {
   Form,
   Select,
   TextArea,
-  Message
+  Message,
+  Icon
 } from "semantic-ui-react";
 
 const orderOptions = [
@@ -36,13 +37,14 @@ class Home extends Component {
     showModal: false,
     posts: [],
     categories: [],
-    postEdit: null
+    postEdit: null,
+    isDetailsPage: false
   };
 
   componentDidMount() {
     const { match: { params } } = this.props;
 
-    this.getPosts(params.category);
+    this.getPosts(params.category, params.post_id);
 
     this.getAllCategories();
   }
@@ -50,7 +52,7 @@ class Home extends Component {
   componentWillReceiveProps(nextProps) {
     const { match: { params } } = nextProps;
 
-    this.getPosts(params.category);
+    this.getPosts(params.category, params.post_id);
   }
 
   getAllCategories = () => {
@@ -70,15 +72,20 @@ class Home extends Component {
     });
   };
 
-  getPosts = category => {
-    let url = category
-      ? `http://localhost:3001/${category}/posts`
-      : "http://localhost:3001/posts";
+  getPosts = (category, post_id) => {
+    let url = !category
+      ? "http://localhost:3001/posts"
+      : post_id
+        ? `http://localhost:3001/posts/${post_id}`
+        : `http://localhost:3001/${category}/posts`;
     fetch(url, {
       method: "GET",
       headers: { Authorization: "v1" }
     }).then(result => {
-      result.json().then(posts => this.setState({ posts }));
+      result.json().then(p => {
+        const posts = p instanceof Array ? p : [p];
+        this.setState({ posts, isDetailsPage: post_id ? true : false });
+      });
     });
   };
 
@@ -97,22 +104,62 @@ class Home extends Component {
 
   render() {
     const { posts, categories } = this.state;
+    const { history } = this.props;
 
     return (
       <div>
         <MyHeader />
 
         <Container text style={{ marginTop: "7em" }}>
-          <div>
-            <Button
-              basic
-              color="blue"
-              fluid
-              onClick={() => this.changeModal(null)}
-            >
-              New Post
-            </Button>
-          </div>
+          {this.state.isDetailsPage ? (
+            <div>
+              <Header as="h2" icon textAlign="center">
+                <Icon name="vcard outline" />
+                <Header.Content>Post Details</Header.Content>
+              </Header>
+            </div>
+          ) : (
+            <div>
+              <Button
+                basic
+                color="blue"
+                fluid
+                onClick={() => this.changeModal(null)}
+              >
+                New Post
+              </Button>
+
+              <div
+                style={{
+                  paddingTop: 20,
+                  paddingBottom: 40
+                }}
+              >
+                <Header as="h5" floated="left">
+                  Categories by{" "}
+                  <Dropdown
+                    inline
+                    options={categories}
+                    onChange={(e, d) => {
+                      history.push(`/${d.value}`);
+                      //this.getPosts(d.value);
+                    }}
+                  />
+                </Header>
+                <Header as="h5" floated="right">
+                  Order by{" "}
+                  <Dropdown
+                    inline
+                    options={orderOptions}
+                    onChange={(e, d) => {
+                      this.orderPostsBy(d.value);
+                    }}
+                  />
+                </Header>
+              </div>
+            </div>
+          )}
+
           {/* 
                 <Header as="h1">Semantic UI React Fixed Template</Header>
                 <p>This is a basic fixed menu template using fixed size containers.</p>
@@ -121,38 +168,10 @@ class Home extends Component {
                     single column layouts.
                 </p> 
             */}
-            <div
-              style={{
-                paddingTop: 20,
-                paddingBottom: 40
-              }}
-            >
-              <Header as="h5" floated="left">
-                Categories by{" "}
-                <Dropdown
-                  inline
-                  options={categories}
-                  onChange={(e, d) => {
-                    const { history } = this.props;
-                    history.push(`/${d.value}`);
-                    //this.getPosts(d.value);
-                  }}
-                />
-              </Header>
-              <Header as="h5" floated="right">
-                Order by{" "}
-                <Dropdown
-                  inline
-                  options={orderOptions}
-                  onChange={(e, d) => {
-                    this.orderPostsBy(d.value);
-                  }}
-                />
-              </Header>
-            </div>
+
           {posts.length == 0 && (
             <Message
-              icon='hand pointer'
+              icon="hand pointer"
               color="blue"
               header="No posts added"
               content="Please click on New Post to add the first post"
@@ -162,8 +181,19 @@ class Home extends Component {
           {posts.map(p => (
             <Post key={p.id} post={p} editPost={this.editPost} />
           ))}
-          
+
+          {this.state.isDetailsPage && (
+            <Button
+              labelPosition="left"
+              icon="left chevron"
+              content="Back"
+              onClick={() => {
+                history.goBack();
+              }}
+            />
+          )}
         </Container>
+
         <Footer />
 
         <FormPost
