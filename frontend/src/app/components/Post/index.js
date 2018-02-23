@@ -1,15 +1,12 @@
 import React, { Component } from "react";
 import {
   Item,
-  Image,
   Header,
   Comment,
   Form,
   Button,
   Label,
-  Menu,
   Icon,
-  Container,
   Dropdown
 } from "semantic-ui-react";
 import TimeAgo from "timeago-react";
@@ -112,12 +109,10 @@ class Post extends Component {
       category,
       voteScore,
       timestamp,
-      commentCount
     } = this.state.post;
 
     const { comments } = this.state;
     const hasComment = comments.length > 0;
-    const colorScore = voteScore > -1 ? "green" : "red";
     const isDetailsPage = this.props.isDetailsPage;
     return (
       <div
@@ -138,7 +133,7 @@ class Post extends Component {
               <Item.Meta>
                 {`by ${author} `}
                 <span style={{ fontSize: "x-small" }}>
-                  <TimeAgo datetime={timestamp} />
+                  <TimeAgo datetime={timestamp || Date.now() } />
                   {/* { timeago().format(new Date(timestamp) ) }  */}
                 </span>
               </Item.Meta>

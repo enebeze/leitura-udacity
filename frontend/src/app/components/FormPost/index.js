@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { Modal } from "antd";
 
-import { Form, Select, TextArea, Dropdown } from "semantic-ui-react";
+import { Form, TextArea, Dropdown } from "semantic-ui-react";
 import { isNull } from "util";
-
-const initialState = {};
 
 class FormPost extends Component {
   state = {
@@ -43,10 +41,7 @@ class FormPost extends Component {
     }).then(result => {
       result.json().then(c => {
         const categories = [];
-        c.categories.map(cat => {
-          categories.push({ text: cat.name, value: cat.path });
-        });
-
+        c.categories.map(cat => categories.push({ text: cat.name, value: cat.path }));
         this.setState({ categories });
       });
     });

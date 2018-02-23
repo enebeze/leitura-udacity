@@ -1,12 +1,18 @@
 import React from "react";
-import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import Home from "./views/Home";
-import FormPost from "./components/FormPost";
+
+import { Provider } from "react-redux";
+import createStore from "./store";
+
+const store = createStore();
 
 export default () => (
-  <BrowserRouter>
-    <div>
-      <Route path="/:category?/:post_id?" component={Home} />
-    </div>
-  </BrowserRouter>
+  <Provider store={store} >
+    <BrowserRouter>
+      <div>
+        <Route strict path="/:category?/:post_id?" component={Home} />
+      </div>
+    </BrowserRouter>
+  </Provider>
 );

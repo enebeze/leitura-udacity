@@ -1,31 +1,23 @@
 import React, { Component } from "react";
-import _ from "lodash";
 import Post from "./../components/Post";
-import CommentPost from "./../components/CommentPost";
 import Footer from "./../components/Footer";
 import MyHeader from "./../components/Header";
 import FormPost from "./../components/FormPost";
-import { Link } from "react-router-dom";
+
+import { withRouter } from 'react-router-dom'
 
 import {
   Container,
-  Divider,
   Dropdown,
-  Grid,
   Header,
-  Image,
-  List,
-  Menu,
-  Segment,
   Button,
-  Item,
-  Comment,
-  Form,
-  Select,
-  TextArea,
   Message,
   Icon
 } from "semantic-ui-react";
+
+/* Redux */
+import { connect } from 'react-redux';
+import PostActions from './../store/ducks/posts';
 
 const orderOptions = [
   { key: "d", text: "Date", value: "timestamp" },
@@ -38,21 +30,15 @@ class Home extends Component {
     posts: [],
     categories: [],
     postEdit: null,
-    isDetailsPage: false
+    check: true
   };
 
   componentDidMount() {
-    const { match: { params } } = this.props;
 
-    this.getPosts(params.category, params.post_id);
+    const { match: { params } } = this.props;
+    this.props.postRequest(params.category, params.post_id);
 
     this.getAllCategories();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const { match: { params } } = nextProps;
-
-    this.getPosts(params.category, params.post_id);
   }
 
   getAllCategories = () => {
@@ -63,31 +49,12 @@ class Home extends Component {
       result.json().then(c => {
         const categories = [];
         categories.push({ text: "All", value: "" });
-        c.categories.map(cat => {
-          categories.push({ text: cat.name, value: cat.path });
-        });
-
+        c.categories.map(cat => categories.push({ text: cat.name, value: cat.path }));
         this.setState({ categories });
       });
     });
   };
 
-  getPosts = (category, post_id) => {
-    let url = !category
-      ? "http://localhost:3001/posts"
-      : post_id
-        ? `http://localhost:3001/posts/${post_id}`
-        : `http://localhost:3001/${category}/posts`;
-    fetch(url, {
-      method: "GET",
-      headers: { Authorization: "v1" }
-    }).then(result => {
-      result.json().then(p => {
-        const posts = p instanceof Array ? p : [p];
-        this.setState({ posts, isDetailsPage: post_id ? true : false });
-      });
-    });
-  };
 
   changeModal = postEdit => {
     this.setState({ showModal: !this.state.showModal, postEdit });
@@ -97,21 +64,18 @@ class Home extends Component {
     this.changeModal(postEdit);
   };
 
-  orderPostsBy = order => {
-    const posts = _.orderBy(this.state.posts, order, "desc");
-    this.setState({ posts }, console.log(this.state.posts));
-  };
-
   render() {
-    const { posts, categories } = this.state;
+    const { categories } = this.state;
+    const posts = this.props.state.data;
+    const isDetailsPage = this.props.state.isDetailsPage;
     const { history } = this.props;
-
+console.log(isDetailsPage);
     return (
       <div>
         <MyHeader />
 
         <Container text style={{ marginTop: "7em" }}>
-          {this.state.isDetailsPage ? (
+          {isDetailsPage ? (
             <div>
               <Header as="h2" icon textAlign="center">
                 <Icon name="vcard outline" />
@@ -142,7 +106,7 @@ class Home extends Component {
                     options={categories}
                     onChange={(e, d) => {
                       history.push(`/${d.value}`);
-                      //this.getPosts(d.value);
+                      this.props.postRequest(d.value);
                     }}
                   />
                 </Header>
@@ -151,9 +115,7 @@ class Home extends Component {
                   <Dropdown
                     inline
                     options={orderOptions}
-                    onChange={(e, d) => {
-                      this.orderPostsBy(d.value);
-                    }}
+                    onChange={(e, d) => this.props.postOrder(d.value) }
                   />
                 </Header>
               </div>
@@ -169,7 +131,7 @@ class Home extends Component {
                 </p> 
             */}
 
-          {posts.length == 0 && (
+          {posts.length === 0 && (
             <Message
               icon="hand pointer"
               color="blue"
@@ -179,10 +141,10 @@ class Home extends Component {
           )}
 
           {posts.map(p => (
-            <Post key={p.id} post={p} editPost={this.editPost} isDetailsPage={this.state.isDetailsPage} />
+            <Post key={p.id} post={p} editPost={this.editPost} isDetailsPage={isDetailsPage} />
           ))}
 
-          {this.state.isDetailsPage && (
+          {isDetailsPage && (
             <Button
               labelPosition="left"
               icon="left chevron"
@@ -206,4 +168,13 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = state => ({
+    state: state.post
+});
+
+const mapDispatchToProps = dispatch => ({
+  postRequest: (category, post_id) => dispatch(PostActions.postRequest(category, post_id)),
+  postOrder: order => dispatch(PostActions.postOrder(order)),
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));

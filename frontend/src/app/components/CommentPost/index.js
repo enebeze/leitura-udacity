@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import TimeAgo from "timeago-react";
-import { Comment, Header, Form, Button, Icon } from "semantic-ui-react";
+import { Comment, Form, Icon } from "semantic-ui-react";
 
 class CommentPost extends Component {
   state = {
@@ -84,7 +84,7 @@ class CommentPost extends Component {
           <Comment.Content>
             <Comment.Author as="a">{author}</Comment.Author>
             <Comment.Metadata>
-              <TimeAgo datetime={timestamp} />
+              <TimeAgo datetime={timestamp || Date.now() } />
               <div>
                 <Icon name="star" />
                 {voteScore}
