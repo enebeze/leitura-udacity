@@ -11,7 +11,8 @@ export default () => (
   <Provider store={store} >
     <BrowserRouter>
       <div>
-        <Route strict path="/:category?/:post_id?" component={Home} />
+        {/* <Route exact path="/" component={Home} /> */}
+        <Route exact path="/:category?/:post_id?" component={Home} />
       </div>
     </BrowserRouter>
   </Provider>

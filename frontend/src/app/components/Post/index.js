@@ -1,4 +1,8 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import TimeAgo from "timeago-react";
+import CommentPost from "./../CommentPost";
+
 import {
   Item,
   Header,
@@ -7,14 +11,15 @@ import {
   Button,
   Label,
   Icon,
-  Dropdown
+  Dropdown,
+  Divider
 } from "semantic-ui-react";
-import TimeAgo from "timeago-react";
 
-import { Link } from "react-router-dom";
+/* Redux */
+import { connect } from "react-redux";
 
-import CommentPost from "./../CommentPost";
-import { Divider } from "semantic-ui-react";
+/* Actions Creators */
+import PostActions from "./../../store/ducks/posts";
 
 class Post extends Component {
   state = {
@@ -24,14 +29,18 @@ class Post extends Component {
   };
 
   componentDidMount() {
-    this.setState({ post: this.props.post });
+    const { isDetailsPage, post } = this.props;
+    this.setState({ post });
 
-    fetch(`http://localhost:3001/posts/${this.props.post.id}/comments`, {
-      method: "GET",
-      headers: { Authorization: "v1" }
-    }).then(result => {
-      result.json().then(comments => this.setState({ comments }));
-    });
+    if (isDetailsPage) {
+      fetch(`http://localhost:3001/posts/${this.props.post.id}/comments`, {
+        method: "GET",
+        headers: { Authorization: "v1" }
+      }).then(result => {
+        result.json().then(comments => this.setState({ comments }));
+      });
+    }
+    
   }
 
   likeNotLike = value => {
@@ -108,12 +117,15 @@ class Post extends Component {
       body,
       category,
       voteScore,
-      timestamp,
+      timestamp
     } = this.state.post;
 
     const { comments } = this.state;
     const hasComment = comments.length > 0;
-    const isDetailsPage = this.props.isDetailsPage;
+    const { isDetailsPage } = this.props;
+
+    
+
     return (
       <div
         style={{
@@ -133,7 +145,7 @@ class Post extends Component {
               <Item.Meta>
                 {`by ${author} `}
                 <span style={{ fontSize: "x-small" }}>
-                  <TimeAgo datetime={timestamp || Date.now() } />
+                  <TimeAgo datetime={timestamp || Date.now()} />
                   {/* { timeago().format(new Date(timestamp) ) }  */}
                 </span>
               </Item.Meta>
@@ -178,7 +190,7 @@ class Post extends Component {
                   <Dropdown.Item
                     icon="edit"
                     text="Edit"
-                    onClick={() => this.props.editPost(this.state.post)}
+                    onClick={() => this.props.changeModal(this.state.post)}
                   />
                   <Dropdown.Item
                     icon="delete"
@@ -235,4 +247,12 @@ class Post extends Component {
   }
 }
 
-export default Post;
+const mapStateToProps = state => ({
+  categorySelected: state.post.categorySelected,
+})
+
+const mapDispatchToProps = dispatch => ({
+  changeModal: postEdit => dispatch(PostActions.changeModal(postEdit)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Post);

@@ -5,24 +5,27 @@ import { Modal } from "antd";
 import { Form, TextArea, Dropdown } from "semantic-ui-react";
 import { isNull } from "util";
 
+/* Redux Connect */
+import { connect } from 'react-redux'
+
+/* Actions Creators */
+import PostActions from "./../../store/ducks/posts";
+
 class FormPost extends Component {
+  
   state = {
     titleModal: "New Post",
-    categories: [],
+    id: null,
     title: "",
     author: "",
     category: "",
     body: "",
-    id: null
   };
 
-  componentDidMount() {
-    this.getAllCategories();
-  }
-
   componentWillReceiveProps(nextProps) {
-    if (!isNull(nextProps.post)) {
-      const { title, author, category, body, id } = nextProps.post;
+    
+    if (!isNull(nextProps.postState.postEdit)) {
+      const { title, author, category, body, id } = nextProps.postState.postEdit;
       this.setState({
         title,
         author,
@@ -33,19 +36,6 @@ class FormPost extends Component {
       });
     }
   }
-
-  getAllCategories = () => {
-    fetch("http://localhost:3001/categories/", {
-      method: "GET",
-      headers: { Authorization: "v1" }
-    }).then(result => {
-      result.json().then(c => {
-        const categories = [];
-        c.categories.map(cat => categories.push({ text: cat.name, value: cat.path }));
-        this.setState({ categories });
-      });
-    });
-  };
 
   S4 = () => {
     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -86,14 +76,7 @@ class FormPost extends Component {
       timestamp: _.now()
     };
 
-    fetch("http://localhost:3001/posts", {
-      method: "POST",
-      headers: {
-        Authorization: "v1",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(post)
-    });
+    this.props.postSave(post, true);
   };
 
   editPost = () => {
@@ -102,14 +85,7 @@ class FormPost extends Component {
       body: this.state.body
     };
 
-    fetch(`http://localhost:3001/posts/${this.state.id}`, {
-      method: "PUT",
-      headers: {
-        Authorization: "v1",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(editPost)
-    });
+    this.props.postSave(editPost, false);
   };
 
   onCancel = () => {
@@ -125,12 +101,15 @@ class FormPost extends Component {
   };
 
   render() {
-    const { categories } = this.state;
+    /* Categories and Posts Redux */
+    const { categories } = this.props.categoryState;
+    const { showModal } = this.props.postState;
+
 
     return (
       <Modal
         title={this.state.titleModal}
-        visible={this.props.showModal}
+        visible={showModal}
         onOk={this.savePost}
         onCancel={this.onCancel}
       >
@@ -173,4 +152,14 @@ class FormPost extends Component {
   }
 }
 
-export default FormPost;
+const mapStateToProps = state => ({
+  postState: state.post,
+  categoryState: state.category
+})
+
+const mapDispatchToProps = dispatch => ({
+  changeModal: postEdit => dispatch(PostActions.changeModal(postEdit)),
+  postSave: (post, isAdd) => dispatch(PostActions.postSave(post, isAdd)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(FormPost);

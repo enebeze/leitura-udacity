@@ -4,7 +4,7 @@ import Footer from "./../components/Footer";
 import MyHeader from "./../components/Header";
 import FormPost from "./../components/FormPost";
 
-import { withRouter } from 'react-router-dom'
+import { withRouter } from "react-router-dom";
 
 import {
   Container,
@@ -16,8 +16,11 @@ import {
 } from "semantic-ui-react";
 
 /* Redux */
-import { connect } from 'react-redux';
-import PostActions from './../store/ducks/posts';
+import { connect } from "react-redux";
+
+/* Actions Creators */
+import PostActions from "./../store/ducks/posts";
+import CategoryActions from "./../store/ducks/category";
 
 const orderOptions = [
   { key: "d", text: "Date", value: "timestamp" },
@@ -25,51 +28,33 @@ const orderOptions = [
 ];
 
 class Home extends Component {
-  state = {
-    showModal: false,
-    posts: [],
-    categories: [],
-    postEdit: null,
-    check: true
-  };
 
   componentDidMount() {
-
+    // Receive props
     const { match: { params } } = this.props;
     this.props.postRequest(params.category, params.post_id);
-
-    this.getAllCategories();
+    // Get Categories
+    this.props.categoryRequest();
+    // Save 
   }
 
-  getAllCategories = () => {
-    fetch("http://localhost:3001/categories/", {
-      method: "GET",
-      headers: { Authorization: "v1" }
-    }).then(result => {
-      result.json().then(c => {
-        const categories = [];
-        categories.push({ text: "All", value: "" });
-        c.categories.map(cat => categories.push({ text: cat.name, value: cat.path }));
-        this.setState({ categories });
-      });
-    });
-  };
-
-
-  changeModal = postEdit => {
-    this.setState({ showModal: !this.state.showModal, postEdit });
-  };
-
-  editPost = postEdit => {
-    this.changeModal(postEdit);
-  };
+  componentWillReceiveProps(nextPros) {
+    const { match: { params } } = nextPros;
+    if (params.category !== this.props.match.params.category || 
+        params.post_id !== this.props.match.params.post_id)
+      this.props.postRequest(params.category, params.post_id);
+  }
 
   render() {
-    const { categories } = this.state;
-    const posts = this.props.state.data;
-    const isDetailsPage = this.props.state.isDetailsPage;
+    /* Categories and Posts Redux */
+    const { categories } = this.props.categoryState;
+    const { posts, isDetailsPage } = this.props.postState;
+
+    /* Route Params */
+    const categorySelected = this.props.match.params.category;
+
     const { history } = this.props;
-console.log(isDetailsPage);
+
     return (
       <div>
         <MyHeader />
@@ -88,8 +73,7 @@ console.log(isDetailsPage);
                 basic
                 color="blue"
                 fluid
-                onClick={() => this.changeModal(null)}
-              >
+                onClick={() => this.props.changeModal()} >
                 New Post
               </Button>
 
@@ -103,10 +87,11 @@ console.log(isDetailsPage);
                   Categories by{" "}
                   <Dropdown
                     inline
+                    value={categorySelected}
                     options={categories}
                     onChange={(e, d) => {
                       history.push(`/${d.value}`);
-                      this.props.postRequest(d.value);
+                      //this.props.postRequest(d.value);
                     }}
                   />
                 </Header>
@@ -115,21 +100,12 @@ console.log(isDetailsPage);
                   <Dropdown
                     inline
                     options={orderOptions}
-                    onChange={(e, d) => this.props.postOrder(d.value) }
+                    onChange={(e, d) => this.props.postOrder(d.value)}
                   />
                 </Header>
               </div>
             </div>
           )}
-
-          {/* 
-                <Header as="h1">Semantic UI React Fixed Template</Header>
-                <p>This is a basic fixed menu template using fixed size containers.</p>
-                <p>
-                    A text container is used for the main container, which is useful for
-                    single column layouts.
-                </p> 
-            */}
 
           {posts.length === 0 && (
             <Message
@@ -141,7 +117,11 @@ console.log(isDetailsPage);
           )}
 
           {posts.map(p => (
-            <Post key={p.id} post={p} editPost={this.editPost} isDetailsPage={isDetailsPage} />
+            <Post
+              key={p.id}
+              post={p}
+              isDetailsPage={isDetailsPage}
+            />
           ))}
 
           {isDetailsPage && (
@@ -158,23 +138,26 @@ console.log(isDetailsPage);
 
         <Footer />
 
-        <FormPost
-          showModal={this.state.showModal}
-          changeModal={this.changeModal}
-          post={this.state.postEdit}
-        />
+        <FormPost />
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-    state: state.post
+  postState: state.post,
+  categoryState: state.category
 });
 
 const mapDispatchToProps = dispatch => ({
-  postRequest: (category, post_id) => dispatch(PostActions.postRequest(category, post_id)),
+  /* Post Actions */
+  postRequest: (category, post_id) =>
+    dispatch(PostActions.postRequest(category, post_id)),
   postOrder: order => dispatch(PostActions.postOrder(order)),
+  changeModal: () => dispatch(PostActions.changeModal(null)),
+
+  /* Category Actions */
+  categoryRequest: () => dispatch(CategoryActions.categoryRequest())
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
