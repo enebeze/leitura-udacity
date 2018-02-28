@@ -29,7 +29,6 @@ const defaultData = {
 
 function getData (token) {
   let data = db[token]
-  debugger
   if (data == null) {
     data = db[token] = clone(defaultData)
   }

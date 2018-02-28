@@ -10,7 +10,7 @@ export const getPosts = (category, post_id) => {
 
 export const add = post => api.post("/posts", post);
 
-export const update = post => api.put(`/posts/${post.id}`);
+export const update = post => api.put(`/posts/${post.id}`, post);
 
 // export const get = bookId =>
 //   fetch(`${api}/books/${bookId}`, { headers })

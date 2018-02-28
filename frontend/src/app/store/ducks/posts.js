@@ -1,20 +1,19 @@
 import { createActions, createReducer } from "reduxsauce";
 import _ from "lodash";
+import { postsToObject } from "./../../util/helpers";
 
 /* Types & Creators */
 
 const { Types, Creators } = createActions({
   /* Request */
   postRequest: ["category", "post_id"],
-  postSuccess: ["posts", "isDetailsPage"],
-  postFailure: null,
+  postRequestSuccess: ["posts", "isDetailsPage"],
+  postRequestFailure: null,
 
   /* Save (Add/Update) */
   postSave: ["post", "isAdd"],
-  postAddSuccess: ["post"],
-  postUpdateSuccess: ["post"],
+  postSaveSuccess: ["post"],
   //postSaveFailure: null,
-
 
   /* Outhers */
   postOrder: ["order"],
@@ -26,12 +25,13 @@ export default Creators;
 
 /* Initial State */
 const INITIAL_STATE = {
-  posts: [],
+  posts: {},
   loading: false,
   error: false,
   isDetailsPage: false,
   showModal: false,
   postEdit: null,
+  orderBy: "timestamp"
 };
 
 /* Reducers */
@@ -57,22 +57,19 @@ export const failure = state => ({
 });
 
 /* Save (Add/Update) */
-export const addSuccess = (state, action) => ({
+export const saveSuccess = (state, action) => ({
   ...state,
-  posts: [...state.posts, action.post]
-});
-
-export const updateSuccess = (state, action) => ({
-  ...state,
-  posts: state.posts.filter(p => p.id !== action.post.id)
-          .push(action.post),
+  posts: {...state.posts, [action.post.id]: action.post },
+  showModal: !state.showModal,
+  postEdit: null,
 });
 
 /* Outher */
 
 export const order = (state, action) => ({
   ...state,
-  posts: _.orderBy(state.posts, action.order, "desc")
+  orderBy: action.order,
+  posts: postsToObject(_.orderBy(state.posts, action.order, "desc"))
 });
 
 export const changeModal = (state, action) => ({
@@ -83,12 +80,11 @@ export const changeModal = (state, action) => ({
 
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.POST_REQUEST]: request,
-  [Types.POST_SUCCESS]: success,
-  [Types.POST_FAILURE]: failure,
+  [Types.POST_REQUEST_SUCCESS]: success,
+  [Types.POST_REQUEST_FAILURE]: failure,
 
   [Types.POST_SAVE]: null,
-  [Types.POST_ADD_SUCCESS]: addSuccess,
-  [Types.POST_UPDATE_SUCCESS]: updateSuccess,
+  [Types.POST_SAVE_SUCCESS]: saveSuccess,
 
   [Types.POST_ORDER]: order,
   [Types.CHANGE_MODAL]: changeModal,

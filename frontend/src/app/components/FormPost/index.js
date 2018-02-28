@@ -11,16 +11,18 @@ import { connect } from 'react-redux'
 /* Actions Creators */
 import PostActions from "./../../store/ducks/posts";
 
+const INITIAL_STATE = {
+  titleModal: "New Post",
+  id: null,
+  title: "",
+  author: "",
+  category: "",
+  body: "",
+};
+
 class FormPost extends Component {
   
-  state = {
-    titleModal: "New Post",
-    id: null,
-    title: "",
-    author: "",
-    category: "",
-    body: "",
-  };
+  state = INITIAL_STATE;
 
   componentWillReceiveProps(nextProps) {
     
@@ -34,6 +36,8 @@ class FormPost extends Component {
         id,
         titleModal: id ? "Edit Post" : "New Post"
       });
+    } else {
+      this.setState(INITIAL_STATE);
     }
   }
 
@@ -62,6 +66,7 @@ class FormPost extends Component {
     if (!this.state.id) {
       this.addPost();
     } else {
+      
       this.editPost();
     }
   };
@@ -81,6 +86,7 @@ class FormPost extends Component {
 
   editPost = () => {
     const editPost = {
+      id: this.state.id,
       title: this.state.title,
       body: this.state.body
     };
@@ -89,16 +95,11 @@ class FormPost extends Component {
   };
 
   onCancel = () => {
-    this.setState({
-      title: "",
-      author: "",
-      category: "",
-      body: "",
-      id: null,
-      titleModal: "New Post"
-    });
+    this.setState(INITIAL_STATE);
     this.props.changeModal(null);
   };
+
+
 
   render() {
     /* Categories and Posts Redux */

@@ -23,14 +23,12 @@ import PostActions from "./../../store/ducks/posts";
 
 class Post extends Component {
   state = {
-    post: {},
     comments: [],
     bodyComment: ""
   };
 
   componentDidMount() {
-    const { isDetailsPage, post } = this.props;
-    this.setState({ post });
+    const { isDetailsPage } = this.props;
 
     if (isDetailsPage) {
       fetch(`http://localhost:3001/posts/${this.props.post.id}/comments`, {
@@ -44,7 +42,7 @@ class Post extends Component {
   }
 
   likeNotLike = value => {
-    fetch(`http://localhost:3001/posts/${this.state.post.id}`, {
+    fetch(`http://localhost:3001/posts/${this.props.post.id}`, {
       method: "POST",
       headers: {
         Authorization: "v1",
@@ -79,7 +77,7 @@ class Post extends Component {
       timestamp: Date.now(),
       body: this.state.bodyComment,
       author: "enebeze",
-      parentId: this.state.post.id
+      parentId: this.props.post.id
     };
 
     fetch("http://localhost:3001/comments", {
@@ -101,7 +99,7 @@ class Post extends Component {
   };
 
   deletePost = () => {
-    fetch(`http://localhost:3001/posts/${this.state.post.id}`, {
+    fetch(`http://localhost:3001/posts/${this.props.post.id}`, {
       method: "DELETE",
       headers: {
         Authorization: "v1"
@@ -118,7 +116,7 @@ class Post extends Component {
       category,
       voteScore,
       timestamp
-    } = this.state.post;
+    } = this.props.post;
 
     const { comments } = this.state;
     const hasComment = comments.length > 0;
@@ -190,7 +188,7 @@ class Post extends Component {
                   <Dropdown.Item
                     icon="edit"
                     text="Edit"
-                    onClick={() => this.props.changeModal(this.state.post)}
+                    onClick={() => this.props.changeModal(this.props.post)}
                   />
                   <Dropdown.Item
                     icon="delete"

@@ -4,6 +4,8 @@ import Footer from "./../components/Footer";
 import MyHeader from "./../components/Header";
 import FormPost from "./../components/FormPost";
 
+import _ from "lodash";
+
 import { withRouter } from "react-router-dom";
 
 import {
@@ -35,7 +37,6 @@ class Home extends Component {
     this.props.postRequest(params.category, params.post_id);
     // Get Categories
     this.props.categoryRequest();
-    // Save 
   }
 
   componentWillReceiveProps(nextPros) {
@@ -45,10 +46,13 @@ class Home extends Component {
       this.props.postRequest(params.category, params.post_id);
   }
 
+  
+
   render() {
     /* Categories and Posts Redux */
     const { categories } = this.props.categoryState;
     const { posts, isDetailsPage } = this.props.postState;
+    const postsArray = _.values(posts);
 
     /* Route Params */
     const categorySelected = this.props.match.params.category;
@@ -100,6 +104,7 @@ class Home extends Component {
                   <Dropdown
                     inline
                     options={orderOptions}
+                    value={this.props.postState.orderBy}
                     onChange={(e, d) => this.props.postOrder(d.value)}
                   />
                 </Header>
@@ -116,7 +121,8 @@ class Home extends Component {
             />
           )}
 
-          {posts.map(p => (
+          {
+            postsArray.map(p => (
             <Post
               key={p.id}
               post={p}
@@ -144,15 +150,16 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  postState: state.post,
-  categoryState: state.category
-});
+const mapStateToProps = state => {
+  return ({
+    postState: state.post,
+    categoryState: state.category
+  })
+};
 
 const mapDispatchToProps = dispatch => ({
   /* Post Actions */
-  postRequest: (category, post_id) =>
-    dispatch(PostActions.postRequest(category, post_id)),
+  postRequest: (category, post_id) => dispatch(PostActions.postRequest(category, post_id)),
   postOrder: order => dispatch(PostActions.postOrder(order)),
   changeModal: () => dispatch(PostActions.changeModal(null)),
 
