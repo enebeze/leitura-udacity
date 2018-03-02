@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { Modal } from "antd";
-
+import { generateId } from "./../../util/helpers";
 import { Form, TextArea, Dropdown } from "semantic-ui-react";
 import { isNull } from "util";
 
@@ -41,27 +41,6 @@ class FormPost extends Component {
     }
   }
 
-  S4 = () => {
-    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-  };
-
-  generateGuid = () => {
-    return (
-      this.S4() +
-      this.S4() +
-      "-" +
-      this.S4() +
-      "-4" +
-      this.S4().substr(0, 3) +
-      "-" +
-      this.S4() +
-      "-" +
-      this.S4() +
-      this.S4() +
-      this.S4()
-    ).toLowerCase();
-  };
-
   savePost = () => {
     if (!this.state.id) {
       this.addPost();
@@ -73,7 +52,7 @@ class FormPost extends Component {
 
   addPost = () => {
     const post = {
-      id: this.generateGuid(),
+      id: generateId(),
       title: this.state.title,
       author: this.state.author,
       category: this.state.category,

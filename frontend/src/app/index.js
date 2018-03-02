@@ -12,7 +12,7 @@ export default () => (
     <BrowserRouter>
       <div>
         {/* <Route exact path="/" component={Home} /> */}
-        <Route exact path="/:category?/:post_id?" component={Home} />
+        <Route exact path="/:category?/:postId?" component={Home} />
       </div>
     </BrowserRouter>
   </Provider>

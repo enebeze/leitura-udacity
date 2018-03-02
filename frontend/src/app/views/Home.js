@@ -24,6 +24,8 @@ import { connect } from "react-redux";
 import PostActions from "./../store/ducks/posts";
 import CategoryActions from "./../store/ducks/category";
 
+
+
 const orderOptions = [
   { key: "d", text: "Date", value: "timestamp" },
   { key: "p", text: "Score", value: "voteScore" }
@@ -34,7 +36,7 @@ class Home extends Component {
   componentDidMount() {
     // Receive props
     const { match: { params } } = this.props;
-    this.props.postRequest(params.category, params.post_id);
+    this.props.postRequest(params.category, params.postId);
     // Get Categories
     this.props.categoryRequest();
   }
@@ -42,11 +44,9 @@ class Home extends Component {
   componentWillReceiveProps(nextPros) {
     const { match: { params } } = nextPros;
     if (params.category !== this.props.match.params.category || 
-        params.post_id !== this.props.match.params.post_id)
-      this.props.postRequest(params.category, params.post_id);
+        params.postId !== this.props.match.params.postId)
+      this.props.postRequest(params.category, params.postId);
   }
-
-  
 
   render() {
     /* Categories and Posts Redux */
@@ -112,7 +112,7 @@ class Home extends Component {
             </div>
           )}
 
-          {posts.length === 0 && (
+          {Object.keys(posts).length === 0 && (
             <Message
               icon="hand pointer"
               color="blue"
@@ -159,7 +159,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   /* Post Actions */
-  postRequest: (category, post_id) => dispatch(PostActions.postRequest(category, post_id)),
+  postRequest: (category, postId) => dispatch(PostActions.postRequest(category, postId)),
   postOrder: order => dispatch(PostActions.postOrder(order)),
   changeModal: () => dispatch(PostActions.changeModal(null)),
 

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import TimeAgo from "timeago-react";
 import CommentPost from "./../CommentPost";
+import { generateId } from "./../../util/helpers";
 
 import {
   Item,
@@ -41,39 +42,9 @@ class Post extends Component {
     
   }
 
-  likeNotLike = value => {
-    fetch(`http://localhost:3001/posts/${this.props.post.id}`, {
-      method: "POST",
-      headers: {
-        Authorization: "v1",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ option: value })
-    }).then(result => {
-      this.setState(prevState => {
-        const { post } = prevState;
-        post.voteScore = post.voteScore + (value === "upVote" ? 1 : -1);
-        return post;
-      });
-    });
-  };
-
-  S4 = () => {
-    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-  };
-
-  generateGuid = () => {
-    return (
-      this.S4() +
-      this.S4() +
-      this.S4() +
-      this.S4().substr(0, 3)
-    ).toLowerCase();
-  };
-
   addNewComment = () => {
     const comment = {
-      id: this.generateGuid(),
+      id: generateId(),
       timestamp: Date.now(),
       body: this.state.bodyComment,
       author: "enebeze",
@@ -99,12 +70,7 @@ class Post extends Component {
   };
 
   deletePost = () => {
-    fetch(`http://localhost:3001/posts/${this.props.post.id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: "v1"
-      }
-    });
+    this.props.postRemove(this.props.post.id);
   };
 
   render() {
@@ -121,8 +87,6 @@ class Post extends Component {
     const { comments } = this.state;
     const hasComment = comments.length > 0;
     const { isDetailsPage } = this.props;
-
-    
 
     return (
       <div
@@ -155,7 +119,7 @@ class Post extends Component {
                       size="mini"
                       color="green"
                       onClick={() => {
-                        this.likeNotLike("upVote");
+                        this.props.postLikeNotLike(id, "upVote");
                       }}
                     >
                       <Icon name="like outline" />
@@ -166,7 +130,7 @@ class Post extends Component {
                       size="mini"
                       color="red"
                       onClick={() => {
-                        this.likeNotLike("downVote");
+                        this.props.postLikeNotLike(id, "downVote");
                       }}
                     >
                       <Icon name="dislike outline" />
@@ -251,6 +215,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   changeModal: postEdit => dispatch(PostActions.changeModal(postEdit)),
+  postRemove: postId => dispatch(PostActions.postRemove(postId)),
+  postLikeNotLike: (postId, value) => dispatch(PostActions.postLikeNotLike(postId, value)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

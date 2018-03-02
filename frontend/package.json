@@ -17,6 +17,7 @@
     "reduxsauce": "^0.7.0",
     "semantic-ui-css": "^2.2.14",
     "semantic-ui-react": "^0.77.2",
+    "shortid": "^2.2.8",
     "timeago-react": "^2.0.0"
   },
   "scripts": {
