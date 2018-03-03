@@ -51,12 +51,10 @@ class Home extends Component {
   render() {
     /* Categories and Posts Redux */
     const { categories } = this.props.categoryState;
-    const { posts, isDetailsPage } = this.props.postState;
-    const postsArray = _.values(posts);
+    const { posts, isDetailsPage, postsArray } = this.props.postState;
 
     /* Route Params */
     const categorySelected = this.props.match.params.category;
-
     const { history } = this.props;
 
     return (
@@ -127,19 +125,11 @@ class Home extends Component {
               key={p.id}
               post={p}
               isDetailsPage={isDetailsPage}
+              history={history}
             />
           ))}
 
-          {isDetailsPage && (
-            <Button
-              labelPosition="left"
-              icon="left chevron"
-              content="Back"
-              onClick={() => {
-                history.goBack();
-              }}
-            />
-          )}
+          
         </Container>
 
         <Footer />
@@ -151,8 +141,10 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => {
+  // Order by posts 
+  const postsArray = _.orderBy(state.post.posts, state.post.orderBy, "desc");
   return ({
-    postState: state.post,
+    postState: { ...state.post, postsArray },
     categoryState: state.category
   })
 };

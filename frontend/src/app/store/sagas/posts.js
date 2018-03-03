@@ -8,14 +8,14 @@ import {
 } from "./../../api/apiPost";
 
 import { call, put, select, take } from "redux-saga/effects";
+import _ from "lodash";
 
 /* Types */
 import { Types as PostTypes } from "./../ducks/posts";
 /* Actions */
 import ActionCreators from "./../ducks/posts";
 
-import { postsToObject } from "./../../util/helpers";
-import _ from "lodash";
+import { arrayToObject } from "./../../util/helpers";
 
 export function* postRequest(action) {
   const response = yield call(requestPosts, action.category, action.postId);
@@ -23,12 +23,12 @@ export function* postRequest(action) {
     // Create array of posts and object to receive posts
     const arrayPosts = response.data instanceof Array ? response.data : [response.data];
     // Object
-    const objectPosts = postsToObject(arrayPosts);
+    const objectPosts = arrayToObject(arrayPosts);
     // Post Success
     yield put(ActionCreators.postRequestSuccess(objectPosts, action.postId ? true : false)
     );
   } else {
-    // POst Failure
+    // Post Failure
     yield put(ActionCreators.postRequestFailure());
   }
 }
@@ -51,7 +51,7 @@ export function* postRemove(action) {
 
   if (response.ok) {
     // Get All posts
-    const posts = yield select(p => p.post.posts);
+    const posts = yield select(p => Object.assign({}, p.post.posts));
     // Remove posts
     delete posts[action.postId];
     // Update Store
@@ -72,19 +72,5 @@ export function* postLikeNotLike(action) {
         response.data.voteScore
       )
     );
-  }
-}
-
-export function* postOrder() {
-  while (true) {
-    const action = yield take([
-      PostTypes.POST_REQUEST_SUCCESS,
-      PostTypes.POST_SAVE_SUCCESS,
-      PostTypes.POST_LIKE_NOT_LIKE_SUCCESS
-    ]);
-    
-    // Reorder
-    const order = yield select(p => p.post.orderBy);
-    yield put(ActionCreators.postOrder(order));
   }
 }

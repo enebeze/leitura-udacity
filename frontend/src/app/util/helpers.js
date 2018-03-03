@@ -1,11 +1,11 @@
 import shortid from "shortid";
 
-export const postsToObject = postsArray => {
-    const objectPosts = {};
+export const arrayToObject = array => {
+    const objects = {};
     // Set object
-    postsArray.map(post => (objectPosts[post.id] = post));
+    array.map(obj => (objects[obj.id] = obj));
     // Return object
-    return objectPosts;
+    return objects;
 }
 
 export const generateId = () => {

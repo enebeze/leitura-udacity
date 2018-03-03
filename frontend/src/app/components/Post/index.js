@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import TimeAgo from "timeago-react";
 import CommentPost from "./../CommentPost";
 import { generateId } from "./../../util/helpers";
-
+import _ from "lodash";
 import {
   Item,
   Header,
@@ -21,25 +21,15 @@ import { connect } from "react-redux";
 
 /* Actions Creators */
 import PostActions from "./../../store/ducks/posts";
+import CommentActions from "./../../store/ducks/comment";
 
 class Post extends Component {
   state = {
-    comments: [],
     bodyComment: ""
   };
 
-  componentDidMount() {
-    const { isDetailsPage } = this.props;
-
-    if (isDetailsPage) {
-      fetch(`http://localhost:3001/posts/${this.props.post.id}/comments`, {
-        method: "GET",
-        headers: { Authorization: "v1" }
-      }).then(result => {
-        result.json().then(comments => this.setState({ comments }));
-      });
-    }
-    
+  componentWillReceiveProps(nextProps) {
+    console.log("ola", nextProps);
   }
 
   addNewComment = () => {
@@ -51,27 +41,23 @@ class Post extends Component {
       parentId: this.props.post.id
     };
 
-    fetch("http://localhost:3001/comments", {
-      method: "POST",
-      headers: {
-        Authorization: "v1",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(comment)
-    }).then(() => {
-      this.setState(prevState => {
-        const { comments } = prevState;
-        comment.voteScore = 1;
-        comments.push(comment);
-        prevState.bodyComment = "";
-        return prevState;
-      });
+    this.props.commentSave(comment, true, () => {
+      this.setState({ bodyComment: "" });
+      console.log(this.state.bodyComment);
+      alert("Congratulations!");
     });
+    
   };
 
   deletePost = () => {
     this.props.postRemove(this.props.post.id);
   };
+
+  goBack = () => {
+    const { history } = this.props;
+    this.props.commentClear();
+    history.goBack();
+  }
 
   render() {
     const {
@@ -83,9 +69,9 @@ class Post extends Component {
       voteScore,
       timestamp
     } = this.props.post;
-
-    const { comments } = this.state;
-    const hasComment = comments.length > 0;
+    
+    const comments = _.values(this.props.comments[id]) || [];
+    
     const { isDetailsPage } = this.props;
 
     return (
@@ -172,7 +158,7 @@ class Post extends Component {
             maxWidth: "100%"
           }}
         >
-          {hasComment && (
+          {comments.length > 0 && (
             <Header as="h4">
               Comments
               <Label size="mini" color="teal" as="a">
@@ -204,19 +190,32 @@ class Post extends Component {
             </Form>
           )}
         </Comment.Group>
+
+        {isDetailsPage && (
+            <Button
+              labelPosition="left"
+              icon="left chevron"
+              content="Back"
+              onClick={this.goBack}
+            />
+          )}
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  categorySelected: state.post.categorySelected,
-})
+  comments: state.comment.comments,
+});
 
 const mapDispatchToProps = dispatch => ({
   changeModal: postEdit => dispatch(PostActions.changeModal(postEdit)),
   postRemove: postId => dispatch(PostActions.postRemove(postId)),
   postLikeNotLike: (postId, value) => dispatch(PostActions.postLikeNotLike(postId, value)),
+
+  /* Comment */
+  commentClear: postId => dispatch(CommentActions.commentClear(postId)),
+  commentSave: (comment, isAdd, callback) => dispatch(CommentActions.commentSave(comment, isAdd, callback)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

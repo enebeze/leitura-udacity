@@ -2,77 +2,50 @@ import React, { Component } from "react";
 import TimeAgo from "timeago-react";
 import { Comment, Form, Icon } from "semantic-ui-react";
 
+/* Redux */
+import { connect } from "react-redux";
+
+/* Actions Creators */
+import CommentActions from "./../../store/ducks/comment";
+
 class CommentPost extends Component {
+
   state = {
     editComment: false,
     bodyEdit: "",
-    comment: {}
   };
 
-  componentDidMount() {
-    this.setState({ comment: this.props.comment });
-  }
-
   likeNotLike = value => {
-    fetch(`http://localhost:3001/comments/${this.state.comment.id}`, {
-      method: "POST",
-      headers: {
-        Authorization: "v1",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ option: value })
-    }).then(result => {
-      this.setState(prevState => {
-        const { comment } = prevState;
-        comment.voteScore = comment.voteScore + (value === "upVote" ? 1 : -1);
-        return comment;
-      });
-    });
+    this.props.commentLikeNotLike(this.props.comment.id, value);
   };
 
   editComment = () => {
-    this.setState({ editComment: true, bodyEdit: this.state.comment.body });
+    this.setState({ editComment: true, bodyEdit: this.props.comment.body });
   };
 
-  cancelEdit = () => {
+  backEdit = () => {
     this.setState({ editComment: false, bodyEdit: "" });
   };
 
   updateComment = () => {
-    const c = {
+    const comment = {
+      id: this.props.comment.id,
       timestamp: Date.now(),
       body: this.state.bodyEdit
     };
 
-    fetch(`http://localhost:3001/comments/${this.state.comment.id}`, {
-      method: "PUT",
-      headers: {
-        Authorization: "v1",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(c)
-    }).then(result => {
-      this.setState(prevState => {
-        const { comment } = prevState;
-        comment.body = c.body;
-        comment.timestamp = c.timestamp;
-        return comment;
-      });
-      this.cancelEdit();
+    this.props.commentSave(comment, false, () => {
+      this.backEdit();
+      alert("Alterado com sucesso!");
     });
   };
 
   deleteComment = () => {
-    fetch(`http://localhost:3001/comments/${this.state.comment.id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: "v1"
-      }
-    });
+    this.props.commentRemove(this.props.comment.id);
   };
 
   render() {
-    const { author, timestamp, body, voteScore } = this.state.comment;
+    const { author, timestamp, body, voteScore } = this.props.comment;
     return (
       <div>
         <Comment
@@ -126,7 +99,7 @@ class CommentPost extends Component {
                   <Comment.Action onClick={this.updateComment}>
                     Save
                   </Comment.Action>
-                  <Comment.Action onClick={this.cancelEdit}>
+                  <Comment.Action onClick={this.backEdit}>
                     Cancel
                   </Comment.Action>
                 </Comment.Actions>
@@ -151,4 +124,11 @@ class CommentPost extends Component {
   }
 }
 
-export default CommentPost;
+
+const mapDispatchToProps = dispatch => ({
+  commentSave: (comment, isAdd, callback) => dispatch(CommentActions.commentSave(comment, isAdd, callback)),
+  commentRemove: commentId => dispatch(CommentActions.commentRemove(commentId)),
+  commentLikeNotLike: (commentId, voteScore) => dispatch(CommentActions.commentLikeNotLike(commentId, voteScore)),
+})
+
+export default connect(null, mapDispatchToProps)(CommentPost);

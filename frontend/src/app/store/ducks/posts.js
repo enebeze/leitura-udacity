@@ -1,6 +1,4 @@
 import { createActions, createReducer } from "reduxsauce";
-import _ from "lodash";
-import { postsToObject } from "./../../util/helpers";
 
 /* Types & Creators */
 
@@ -93,7 +91,6 @@ export const likeNotLikeSuccess = (state, action) => ({
 export const order = (state, action) => ({
   ...state,
   orderBy: action.order,
-  posts: postsToObject(_.orderBy(state.posts, action.order, "desc"))
 });
 
 export const changeModal = (state, action) => ({
