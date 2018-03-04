@@ -6,9 +6,9 @@ import {
   remove,
   likeNotLike
 } from "./../../api/apiPost";
+import { message } from 'antd';
 
 import { call, put, select, take } from "redux-saga/effects";
-import _ from "lodash";
 
 /* Types */
 import { Types as PostTypes } from "./../ducks/posts";
@@ -18,7 +18,9 @@ import ActionCreators from "./../ducks/posts";
 import { arrayToObject } from "./../../util/helpers";
 
 export function* postRequest(action) {
+  
   const response = yield call(requestPosts, action.category, action.postId);
+
   if (response.ok) {
     // Create array of posts and object to receive posts
     const arrayPosts = response.data instanceof Array ? response.data : [response.data];
@@ -73,4 +75,15 @@ export function* postLikeNotLike(action) {
       )
     );
   }
+}
+
+export function* notification() {
+
+  while(true) {
+    yield take(PostTypes.POST_SAVE_SUCCESS);
+
+    message.success('Post Save Success');
+  }
+
+  
 }

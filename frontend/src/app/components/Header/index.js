@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Menu, Container, Image, Dropdown, Button } from 'semantic-ui-react'
+import { Menu, Container, Image, Button } from 'semantic-ui-react'
 
 const Header = () => (
   <Menu style={{ background: "#02acfe" }} fixed="top" inverted>

@@ -11,6 +11,7 @@ import {
   postSave,
   postRemove,
   postLikeNotLike,
+  notification
 } from "./posts";
 
 import { commentRequest, commentSave, commentRemove, commentLikeNotLike } from "./comment";
@@ -23,6 +24,7 @@ export default function* root() {
     takeLatest(PostTypes.POST_SAVE, postSave),
     takeLatest(PostTypes.POST_REMOVE, postRemove),
     takeLatest(PostTypes.POST_LIKE_NOT_LIKE, postLikeNotLike),
+    fork(notification),
 
     /* Comments */
     fork(commentRequest),

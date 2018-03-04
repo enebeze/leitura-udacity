@@ -1,14 +1,10 @@
 import { createActions, createReducer } from "reduxsauce";
-//import _ from "lodash";
-import { postsToObject } from "./../../util/helpers";
 
 /* Types & Creators */
 
 const { Types, Creators } = createActions({
   /* Request */
-  commentRequest: ["postId"],
-  commentRequestSuccess: ["comments", "postId"],
-  commentRequestFailure: null,
+  commentRequestSuccess: ["comments"],
 
   /* Save (Add/Update) */
   commentSave: ["comment", "isAdd", "callback"],
@@ -36,10 +32,8 @@ const INITIAL_STATE = {
 
 /* Reducers */
 
-export const request = state => ({ ...state });
-
 export const requestSuccess = (state, action) => ({
-  comments: { ...state.comments, [action.postId]: action.comments }
+  comments: action.comments
 });
 
 /* Save (Add/Update) */
@@ -62,9 +56,7 @@ export const clear = (state, action) => INITIAL_STATE;
 
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.COMMENT_REQUEST]: request,
   [Types.COMMENT_REQUEST_SUCCESS]: requestSuccess,
-  [Types.COMMENT_REQUEST_FAILURE]: null,
 
   [Types.COMMENT_SAVE]: null,
   [Types.COMMENT_SAVE_SUCCESS]: saveSuccess,

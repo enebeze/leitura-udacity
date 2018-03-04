@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import TimeAgo from "timeago-react";
 import { Comment, Form, Icon } from "semantic-ui-react";
+import { Modal } from "antd";
 
 /* Redux */
 import { connect } from "react-redux";
@@ -8,51 +9,52 @@ import { connect } from "react-redux";
 /* Actions Creators */
 import CommentActions from "./../../store/ducks/comment";
 
+/* Component state */
+const INITIAL_STATE = {
+  editComment: false,
+  bodyEdit: "",
+};
+
 class CommentPost extends Component {
 
-  state = {
-    editComment: false,
-    bodyEdit: "",
-  };
+  state = INITIAL_STATE
 
-  likeNotLike = value => {
-    this.props.commentLikeNotLike(this.props.comment.id, value);
-  };
-
-  editComment = () => {
-    this.setState({ editComment: true, bodyEdit: this.props.comment.body });
-  };
-
-  backEdit = () => {
-    this.setState({ editComment: false, bodyEdit: "" });
-  };
-
+  /* Update comment */
   updateComment = () => {
     const comment = {
       id: this.props.comment.id,
       timestamp: Date.now(),
       body: this.state.bodyEdit
     };
-
-    this.props.commentSave(comment, false, () => {
-      this.backEdit();
-      alert("Alterado com sucesso!");
-    });
+    // save comment
+    this.props.commentSave(comment, false, this.clearState);
   };
 
+  /* Delete comment */
   deleteComment = () => {
-    this.props.commentRemove(this.props.comment.id);
-  };
+    Modal.confirm({
+      title: 'Are you sure delete this comment?',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk: () => { this.props.commentRemove(this.props.comment.id) }
+    });
+  }
+
+  /* Edit comment */
+  editComment = () => this.setState({ editComment: true, bodyEdit: this.props.comment.body });
+  /* Like not like comment */
+  likeNotLike = value => this.props.commentLikeNotLike(this.props.comment.id, value);
+  /* Back state to state initial */
+  clearState = () => this.setState(INITIAL_STATE);
 
   render() {
+    /* propertys  */
     const { author, timestamp, body, voteScore } = this.props.comment;
+
     return (
       <div>
-        <Comment
-          style={{
-            paddingBottom: 10
-          }}
-        >
+        <Comment style={{ paddingBottom: 10 }}>
           {/* <Comment.Avatar src="/images/avatar/small/matt.jpg" /> */}
           <Comment.Content>
             <Comment.Author as="a">{author}</Comment.Author>
@@ -63,20 +65,15 @@ class CommentPost extends Component {
                 {voteScore}
               </div>
               <Comment.Actions>
-                <Comment.Action
-                  onClick={() => {
-                    this.likeNotLike("upVote");
-                  }}
-                >
+                
+                <Comment.Action onClick={() => { this.likeNotLike("upVote"); }} >
                   <Icon name="like outline" />
                 </Comment.Action>
-                <Comment.Action
-                  onClick={() => {
-                    this.likeNotLike("downVote");
-                  }}
-                >
+
+                <Comment.Action onClick={() => { this.likeNotLike("downVote"); }}>
                   <Icon name="dislike outline" />
                 </Comment.Action>
+
               </Comment.Actions>
             </Comment.Metadata>
             {this.state.editComment ? (
@@ -91,15 +88,12 @@ class CommentPost extends Component {
                     minHeight: 50,
                     width: 300
                   }}
-                  onChange={(e, { value }) =>
-                    this.setState({ bodyEdit: value })
-                  }
-                />
+                  onChange={(e, { value }) => this.setState({ bodyEdit: value })} />
                 <Comment.Actions>
                   <Comment.Action onClick={this.updateComment}>
                     Save
                   </Comment.Action>
-                  <Comment.Action onClick={this.backEdit}>
+                  <Comment.Action onClick={this.clearState}>
                     Cancel
                   </Comment.Action>
                 </Comment.Actions>
@@ -126,9 +120,11 @@ class CommentPost extends Component {
 
 
 const mapDispatchToProps = dispatch => ({
+  /* Comment Actions */
   commentSave: (comment, isAdd, callback) => dispatch(CommentActions.commentSave(comment, isAdd, callback)),
   commentRemove: commentId => dispatch(CommentActions.commentRemove(commentId)),
   commentLikeNotLike: (commentId, voteScore) => dispatch(CommentActions.commentLikeNotLike(commentId, voteScore)),
 })
 
+/* Connect commponent to redux */
 export default connect(null, mapDispatchToProps)(CommentPost);

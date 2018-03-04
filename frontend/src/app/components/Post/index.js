@@ -4,6 +4,9 @@ import TimeAgo from "timeago-react";
 import CommentPost from "./../CommentPost";
 import { generateId } from "./../../util/helpers";
 import _ from "lodash";
+
+import { Modal } from 'antd';
+
 import {
   Item,
   Header,
@@ -23,14 +26,13 @@ import { connect } from "react-redux";
 import PostActions from "./../../store/ducks/posts";
 import CommentActions from "./../../store/ducks/comment";
 
-class Post extends Component {
-  state = {
-    bodyComment: ""
-  };
+const INITIAL_STATE = {
+  bodyComment: ""
+};
 
-  componentWillReceiveProps(nextProps) {
-    console.log("ola", nextProps);
-  }
+class Post extends Component {
+  
+  state = INITIAL_STATE;
 
   addNewComment = () => {
     const comment = {
@@ -41,16 +43,22 @@ class Post extends Component {
       parentId: this.props.post.id
     };
 
-    this.props.commentSave(comment, true, () => {
-      this.setState({ bodyComment: "" });
-      console.log(this.state.bodyComment);
-      alert("Congratulations!");
-    });
+    this.props.commentSave(comment, true, () => this.setState(INITIAL_STATE));
     
   };
 
   deletePost = () => {
-    this.props.postRemove(this.props.post.id);
+
+    Modal.confirm({
+      title: 'Are you sure delete this post?',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk: () => { 
+        this.props.postRemove(this.props.post.id) 
+      }
+    });
+
   };
 
   goBack = () => {
@@ -67,7 +75,8 @@ class Post extends Component {
       body,
       category,
       voteScore,
-      timestamp
+      timestamp,
+      commentCount
     } = this.props.post;
     
     const comments = _.values(this.props.comments[id]) || [];
@@ -94,7 +103,6 @@ class Post extends Component {
                 {`by ${author} `}
                 <span style={{ fontSize: "x-small" }}>
                   <TimeAgo datetime={timestamp || Date.now()} />
-                  {/* { timeago().format(new Date(timestamp) ) }  */}
                 </span>
               </Item.Meta>
               <Item.Description>{body}</Item.Description>
@@ -158,16 +166,17 @@ class Post extends Component {
             maxWidth: "100%"
           }}
         >
-          {comments.length > 0 && (
+          
             <Header as="h4">
               Comments
               <Label size="mini" color="teal" as="a">
-                {comments.length}
+                { comments.length }
               </Label>
             </Header>
-          )}
+          
 
           {comments.map(c => <CommentPost key={c.id} comment={c} />)}
+
           {isDetailsPage && (
             <Form reply>
               <Form.TextArea
@@ -186,10 +195,12 @@ class Post extends Component {
                 size="mini"
                 onClick={this.addNewComment}
               />
-              <Divider />
+              
             </Form>
           )}
         </Comment.Group>
+        
+        <Divider />
 
         {isDetailsPage && (
             <Button

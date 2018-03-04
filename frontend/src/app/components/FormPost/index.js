@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { Modal } from "antd";
 import { generateId } from "./../../util/helpers";
-import { Form, TextArea, Dropdown } from "semantic-ui-react";
+import { Form } from "semantic-ui-react";
 import { isNull } from "util";
 
 /* Redux Connect */
@@ -18,11 +18,15 @@ const INITIAL_STATE = {
   author: "",
   category: "",
   body: "",
+  categoryError: false,
 };
 
 class FormPost extends Component {
   
   state = INITIAL_STATE;
+
+  handleChange = (e, { name, value }) => this.setState({ [name]: value })
+
 
   componentWillReceiveProps(nextProps) {
     
@@ -42,6 +46,12 @@ class FormPost extends Component {
   }
 
   savePost = () => {
+
+    if (!this.state.category) {
+      this.setState({ categoryError: true })
+      return
+    };
+
     if (!this.state.id) {
       this.addPost();
     } else {
@@ -85,47 +95,36 @@ class FormPost extends Component {
     const { categories } = this.props.categoryState;
     const { showModal } = this.props.postState;
 
+    const { id, title, author, category, body } = this.state;
 
     return (
       <Modal
         title={this.state.titleModal}
         visible={showModal}
-        onOk={this.savePost}
+        footer={null}
         onCancel={this.onCancel}
       >
-        <Form>
-          <Form.Field>
-            <input
-              placeholder="Title"
-              value={this.state.title}
-              onChange={event => this.setState({ title: event.target.value })}
-            />
-          </Form.Field>
-          <Form.Field>
-            <input
-              disabled={this.state.id ? true : false}
-              placeholder="Author"
-              value={this.state.author}
-              onChange={event => this.setState({ author: event.target.value })}
-            />
-          </Form.Field>
-          <Form.Field>
-            <Dropdown
-              disabled={this.state.id ? true : false}
-              value={this.state.category}
-              onChange={(e, { value }) => this.setState({ category: value })}
+        <Form onSubmit={this.savePost} >
+          <Form.Input required placeholder='Title' name='title' value={title} onChange={this.handleChange} />
+          <Form.Input required disabled={id ? true : false} placeholder='Author' name='author' value={author} onChange={this.handleChange} />
+          
+          
+          <Form.Dropdown 
+              error={this.state.categoryError}
+              disabled={id ? true : false}
+              value={category}
+              onChange={this.handleChange}
+              name="category"
               placeholder="Category"
               selection
-              options={categories}
-            />
-          </Form.Field>
+              options={categories} />
 
-          <Form.Field
-            control={TextArea}
-            value={this.state.body}
-            placeholder="Tell us more about anything..."
-            onChange={event => this.setState({ body: event.target.value })}
-          />
+          <Form.TextArea required placeholder='Tell us more about anything' name='body' value={body} onChange={this.handleChange} />
+
+          <Form.Group>
+            <Form.Button primary content='Submit'>Save</Form.Button>
+            <Form.Button type="button" onClick={this.onCancel} >Cancel</Form.Button>
+          </Form.Group>
         </Form>
       </Modal>
     );

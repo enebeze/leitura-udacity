@@ -4,30 +4,36 @@ import { requestCommentsByPostId, add, update, remove, likeNotLike } from "./../
 import { call, put, select, take } from "redux-saga/effects";
 
 /* Actions and Types */
-import ActionCreators, { Types as CommentTypes } from "./../ducks/comment";
+import ActionCreators from "./../ducks/comment";
 import { Types as PostTypes } from "./../ducks/posts";
 
 import { arrayToObject } from "./../../util/helpers";
 
 export function* commentRequest(action) {
-  while (true) {
-    const action = yield take(PostTypes.POST_REQUEST);
 
-    if (action.postId) {
-      const response = yield call(requestCommentsByPostId, action.postId);
-      
+  while (true) {
+    
+    yield take(PostTypes.POST_REQUEST_SUCCESS);
+
+    const posts = yield select(state => state.post.posts);
+
+    const comments = {};
+
+    for (const postId in posts) {
+
+      const response = yield call(requestCommentsByPostId, postId);
+
       if (response.ok) {
-        // Create array of comments and object to receive comments
-        const arrayComments = response.data instanceof Array ? response.data : [response.data];
-        // Object
-        const objectComments = arrayToObject(arrayComments);
-        // Comment Success
-        yield put(ActionCreators.commentRequestSuccess(objectComments, action.postId));
-      } else {
-        // Comment Failure
-        yield put(ActionCreators.commentRequestFailure());
+        // Comments object
+        const objectComments = arrayToObject(response.data);
+        // Add to object 
+        comments[postId] = objectComments;
       }
     }
+
+    // Update state comments
+    yield put(ActionCreators.commentRequestSuccess(comments));
+    
   }
 }
 
@@ -41,7 +47,7 @@ export function* commentSave(action) {
     // Update store
     yield put(ActionCreators.commentSaveSuccess(response.data));
     // Execute function callback
-    action.callback();
+    if (action.callback) action.callback();
   }
 }
 
@@ -52,7 +58,7 @@ export function* commentRemove(action) {
   if (response.ok) {
     // Get a copy for all comments
     const comments = yield select(p => Object.assign({}, p.comment.comments));
-    // Remove posts
+    // Remove comment
     delete comments[response.data.parentId][action.commentId];
     // Update Store
     yield put(ActionCreators.commentRemoveSuccess(comments));
@@ -60,7 +66,7 @@ export function* commentRemove(action) {
 }
 
 export function* commentLikeNotLike(action) {
-  // Call Like or Dislike
+  // Call Like Not Dislike
   const response = yield call(likeNotLike, action.commentId, { option: action.voteScore });
 
   if (response.ok) {
