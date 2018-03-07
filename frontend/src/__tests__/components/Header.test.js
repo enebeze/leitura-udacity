@@ -10,7 +10,6 @@ describe("Testing Header", () => {
     it("renders as aspected", () => {
 
         const wrapper = shallow(<Header />);
-
         expect(wrapper.children().children()).toHaveLength(2);
     })
 })

@@ -68,7 +68,7 @@ class Post extends Component {
   }
 
   render() {
-    console.log(this.props)
+    
     const {
       id,
       title,
@@ -76,11 +76,10 @@ class Post extends Component {
       body,
       category,
       voteScore,
-      timestamp,
-      commentCount
+      timestamp
     } = this.props.post;
     
-    const comments = []// _.values(this.props.comments[id]) || [];
+    const comments = _.values(this.props.comments[id]) || [];
     
     const { isDetailsPage } = this.props;
 
@@ -95,7 +94,7 @@ class Post extends Component {
           <Item>
             <Item.Content>
               <Item.Header>
-                <Link id="title" to={`/${category}/${id}`} style={{ color: "#000" }}>
+                <Link to={`/${category}/${id}`} style={{ color: "#000" }}>
                   {title}
                 </Link>
               </Item.Header>
@@ -145,11 +144,13 @@ class Post extends Component {
               <Dropdown icon="block layout">
                 <Dropdown.Menu>
                   <Dropdown.Item
+                    id="edit"
                     icon="edit"
                     text="Edit"
                     onClick={() => this.props.changeModal(this.props.post)}
                   />
                   <Dropdown.Item
+                    id="delete"
                     icon="delete"
                     text="Delete"
                     onClick={this.deletePost}
@@ -208,6 +209,7 @@ class Post extends Component {
               labelPosition="left"
               icon="left chevron"
               content="Back"
+              id="back"
               onClick={this.goBack}
             />
           )}
