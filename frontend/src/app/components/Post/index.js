@@ -68,6 +68,7 @@ class Post extends Component {
   }
 
   render() {
+    console.log(this.props)
     const {
       id,
       title,
@@ -79,7 +80,7 @@ class Post extends Component {
       commentCount
     } = this.props.post;
     
-    const comments = _.values(this.props.comments[id]) || [];
+    const comments = []// _.values(this.props.comments[id]) || [];
     
     const { isDetailsPage } = this.props;
 
@@ -94,7 +95,7 @@ class Post extends Component {
           <Item>
             <Item.Content>
               <Item.Header>
-                <Link to={`/${category}/${id}`} style={{ color: "#000" }}>
+                <Link id="title" to={`/${category}/${id}`} style={{ color: "#000" }}>
                   {title}
                 </Link>
               </Item.Header>
