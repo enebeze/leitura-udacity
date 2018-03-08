@@ -94,7 +94,7 @@ class Post extends Component {
           <Item>
             <Item.Content>
               <Item.Header>
-                <Link to={`/${category}/${id}`} style={{ color: "#000" }}>
+                <Link id="link_title" to={`/${category}/${id}`} style={{ color: "#000" }}>
                   {title}
                 </Link>
               </Item.Header>
@@ -110,6 +110,7 @@ class Post extends Component {
                 <Button size="mini" as="div" labelPosition="right">
                   <Button.Group size="mini">
                     <Button
+                      id="like_btn"
                       size="mini"
                       color="green"
                       onClick={() => {
@@ -121,6 +122,7 @@ class Post extends Component {
                     </Button>
                     <Button.Or text={voteScore} />
                     <Button
+                      id="not_like_btn"
                       size="mini"
                       color="red"
                       onClick={() => {
@@ -180,7 +182,7 @@ class Post extends Component {
           {comments.map(c => <CommentPost key={c.id} comment={c} />)}
 
           {isDetailsPage && (
-            <Form reply>
+            <Form id="form_add_comment" reply>
               <Form.TextArea
                 placeholder="Comment"
                 style={{ height: 80, minHeight: 80 }}
@@ -190,6 +192,7 @@ class Post extends Component {
                 }
               />
               <Button
+                id="add_comment"
                 content="Add Comment"
                 labelPosition="left"
                 icon="edit"

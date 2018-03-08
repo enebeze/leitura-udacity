@@ -1,0 +1,30 @@
+{
+  "initialState": {
+    "comment": {
+      "comments": {
+        "1": {
+          "1": {
+            "id": 1,
+            "author": "autho",
+            "body": "body",
+            "voteScore": 1
+          },
+          "2": {
+            "id": 2,
+            "author": "autho",
+            "body": "body",
+            "voteScore": 1
+          }
+        }
+      }
+    }
+  },
+  
+  "post": {
+    "id": 1,
+    "title": "New Post",
+    "author": "author",
+    "category": "redux",
+    "body": "body"
+  }
+}

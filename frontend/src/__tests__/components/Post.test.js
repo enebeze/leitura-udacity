@@ -1,130 +1,146 @@
 import React from "react";
 import { shallow } from "enzyme";
-
 import configureStore from "redux-mock-store";
+import sinon from "sinon";
+
+/* Redux actions */
 import PostActions from "../../app/store/ducks/posts";
+import CommentActions from "../../app/store/ducks/comment";
 
-import { Link } from "react-router-dom";
-import CommentPost from "../../app/components/CommentPost";
-
-import {
-  Item,
-  Header,
-  Comment,
-  Form,
-  Button,
-  Label,
-  Icon,
-  Dropdown,
-  Divider
-} from "semantic-ui-react";
-
-/* Component Post */
+/* Components */
 import Post from "../../app/components/Post";
-
-const mockStore = configureStore([]);
-
-const initialState = {
-  comment: {
-    comments: {
-      1: {
-        1: {
-          id: 1,
-          author: "autho",
-          body: "body",
-          voteScore: 1
-        },
-        2: {
-          id: 2,
-          author: "autho",
-          body: "body",
-          voteScore: 1
-        }
-      }
-    }
-  }
-};
-
-const post = {
-  id: 1,
-  title: "New Post",
-  author: "author",
-  category: "redux",
-  body: "body"
-};
+import CommentPost from "../../app/components/CommentPost";
+import { Modal } from 'antd';
 
 /* Mock store */
+const mockStore = configureStore();
+
+/* data json */
+const datas = require("../data/posts.json");
+
+/* consts */
+const initialState = datas.initialState;
+const post = datas.post;
+
+/* store */
 const store = mockStore(initialState);
 
 /* Component post */
 function createWrapper() {
-  return shallow(<Post post={post} />, { context: { store } });
+  return shallow(<Post post={post} />, { context: { store } }).dive();
 }
 
 describe("Testing component post", () => {
-
   it("render link to details", () => {
+    /* my component */
     const wrapper = createWrapper();
     /* Test values render */
     expect(
       wrapper
-        .dive()
-        .find(Link)
+        .find("#link_title")
         .prop("to")
-    ).toContain(`/${post.category}/${post.id}`);
+    ).toBe(`/${post.category}/${post.id}`);
   });
 
   it("render comments as expected", () => {
+    /* my component */
     const wrapper = createWrapper();
-
-    expect(wrapper.dive().find(CommentPost)).toHaveLength(2);
+    /* my expect */
+    expect(wrapper.find(CommentPost)).toHaveLength(2);
   });
 
   it("button back only details page", () => {
+    /* my component */
     const wrapper = createWrapper();
-
-    expect(wrapper.dive().find("#back")).toHaveLength(0);
+    /* no have button */
+    expect(wrapper.find("#back")).toHaveLength(0);
+    /* set details page */
     wrapper.setProps({ isDetailsPage: true });
-    expect(wrapper.dive().find("#back")).toHaveLength(1);
+    /* now have button */
+    expect(wrapper.find("#back")).toHaveLength(1);
   });
 
   it("form add comments only details page", () => {
+    /* my component */
     const wrapper = createWrapper();
-
-    expect(wrapper.dive().find(Form)).toHaveLength(0);
+    /* no have form add comment */
+    expect(wrapper.find("#form_add_comment")).toHaveLength(0);
+    /* set details page */
     wrapper.setProps({ isDetailsPage: true });
-    expect(wrapper.dive().find(Form)).toHaveLength(1);
-  });
-
-  
+    /* now have form add comment */
+    expect(wrapper.find("#form_add_comment")).toHaveLength(1);
+  });  
 });
 
-describe("Testing actions posts", () => {
+describe("Testing post actions", () => {
 
   it("should edit post", () => {
+    /* my component */
     const wrapper = createWrapper();
-
-    wrapper
-      .dive()
-      .find("#edit")
-      .simulate("click");
+    /* simulate edit button click */
+    wrapper.find("#edit").simulate("click");
+    /* my expect */
     expect(store.getActions()).toContainEqual(PostActions.changeModal(post));
   });
 
   it("should remove post", () => {
+    /* my spy */
+    sinon.spy(Modal, "confirm");
+    /* my component */
     const wrapper = createWrapper();
-
-    wrapper
-      .dive()
-      .find("#delete")
-      .simulate("click");
-
-    console.log(wrapper
-      .dive()
-      .find("#delete").prop("onClick"))
-
-      // https://stackoverflow.com/questions/38348110/test-react-confirmation-window-using-enzyme
-    //expect(store.getActions()).toContainEqual(PostActions.postRemove(post.id));
+    /* simulate button click */
+    wrapper.find("#delete").simulate("click");    
+    /* get params */
+    const params = Modal.confirm.args[0][0];
+    /* Simulate press YES */
+    params.onOk();
+    // my expect
+    expect(store.getActions()).toContainEqual(PostActions.postRemove(post.id));    
   });
 
+  it("should like or not like post", () => {
+    /* my component */
+    const wrapper = createWrapper();
+    /* simulate like button click */
+    wrapper.find("#like_btn").simulate("click");
+    /* expect action like */
+    expect(store.getActions()).toContainEqual(PostActions.postLikeNotLike(post.id, "upVote"));
+    
+    /* simulate not like button click */
+    wrapper.find("#not_like_btn").simulate("click");
+    /* expect action not like */
+    expect(store.getActions()).toContainEqual(PostActions.postLikeNotLike(post.id, "downVote"));
+  });
 })
+
+describe("Testing comment actions", () => {
+
+  it("should clear comment when back button click", () => {
+    /* my component */
+    const wrapper = createWrapper();
+    /* create function goback to simulate navigation */
+    const history = { goBack: () => { }}
+    /* set details page */
+    wrapper.setProps({ isDetailsPage: true, history: history });
+    /* click button */
+    wrapper.find("#back").simulate("click");
+    /* expect action clear comment */
+    expect(store.getActions()).toContainEqual(CommentActions.commentClear(post.id));
+  });
+
+  it("should save comment", () => {
+    /* my spy */
+    const saveCommentSpy = sinon.spy(CommentActions, "commentSave")
+    /* my component */
+    const wrapper = createWrapper();
+    /* set details page */
+    wrapper.setProps({ isDetailsPage: true });
+    /* set state */
+    wrapper.setState({ bodyComment: "New comment" });
+    /* click button */
+    wrapper.find("#add_comment").simulate("click");
+    /* expect the action save comment to be run once */
+    expect(saveCommentSpy.calledOnce).toBe(true);
+  })
+
+});
