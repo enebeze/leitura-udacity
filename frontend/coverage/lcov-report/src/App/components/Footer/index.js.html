@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for src/app/components/Footer/index.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">All files</a> / <a href="index.html">src/app/components/Footer</a> index.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">50% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>1/2</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/1</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">50% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>1/2</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from "react";
+&nbsp;
+import { Segment, Grid, Divider, List, Container, Header } from 'semantic-ui-react';
+&nbsp;
+const Footer = <span class="fstat-no" title="function not covered" >()</span> =&gt; (
+<span class="cstat-no" title="statement not covered" >  &lt;Segment</span>
+    inverted
+    vertical
+    style={{ margin: "5em 0em 0em", padding: "5em 0em" }}
+  &gt;
+    &lt;Container textAlign="center"&gt;
+      &lt;Grid divided inverted stackable&gt;
+        &lt;Grid.Row&gt;
+          &lt;Grid.Column width={8}&gt;
+            &lt;Header inverted as="h4" content="React JS" /&gt;
+            &lt;List link inverted&gt;
+              &lt;List.Item as="a"&gt;ReactJS - Facebook&lt;/List.Item&gt;
+              &lt;List.Item as="a"&gt;Blog ReactJS&lt;/List.Item&gt;
+              &lt;List.Item as="a"&gt;News ReactJS&lt;/List.Item&gt;
+            &lt;/List&gt;
+          &lt;/Grid.Column&gt;
+          &lt;Grid.Column width={8}&gt;
+            &lt;Header inverted as="h4" content="Bibliotecas" /&gt;
+            &lt;List link inverted&gt;
+              &lt;List.Item as="a"&gt;Semantict UI React&lt;/List.Item&gt;
+              &lt;List.Item as="a"&gt;React Router Dom&lt;/List.Item&gt;
+              &lt;List.Item as="a"&gt;Redux&lt;/List.Item&gt;
+              &lt;List.Item as="a"&gt;Firebase&lt;/List.Item&gt;
+            &lt;/List&gt;
+          &lt;/Grid.Column&gt;
+        &lt;/Grid.Row&gt;
+      &lt;/Grid&gt;
+&nbsp;
+      &lt;Divider inverted section /&gt;
+      &lt;List horizontal inverted divided link&gt;
+        &lt;List.Item as="a" href="#"&gt;
+          Site Map
+        &lt;/List.Item&gt;
+        &lt;List.Item as="a" href="#"&gt;
+          Contact Us
+        &lt;/List.Item&gt;
+        &lt;List.Item as="a" href="#"&gt;
+          Terms and Conditions
+        &lt;/List.Item&gt;
+        &lt;List.Item as="a" href="#"&gt;
+          Privacy Policy
+        &lt;/List.Item&gt;
+      &lt;/List&gt;
+    &lt;/Container&gt;
+  &lt;/Segment&gt;
+);
+&nbsp;
+export default Footer</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Mar 09 2018 00:25:13 GMT-0300 (-03)
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

@@ -6,8 +6,6 @@ import FormPost from "./../components/FormPost";
 
 import _ from "lodash";
 
-import { withRouter } from "react-router-dom";
-
 import {
   Container,
   Dropdown,
@@ -24,11 +22,10 @@ import { connect } from "react-redux";
 import PostActions from "./../store/ducks/posts";
 import CategoryActions from "./../store/ducks/category";
 
-
-
 const orderOptions = [
   { key: "d", text: "Date", value: "timestamp" },
-  { key: "p", text: "Score", value: "voteScore" }
+  { key: "p", text: "Score", value: "voteScore" },
+  { key: "c", text: "Comments", value: "commentCount" },
 ];
 
 class Home extends Component {
@@ -63,19 +60,20 @@ class Home extends Component {
 
         <Container text style={{ marginTop: "7em" }}>
           {isDetailsPage ? (
-            <div>
+            <div id="header_post_details">
               <Header as="h2" icon textAlign="center">
                 <Icon name="vcard outline" />
                 <Header.Content>Post Details</Header.Content>
               </Header>
             </div>
           ) : (
-            <div>
+            <div id="header_home" >
               <Button
+                id="new_post"
                 basic
                 color="blue"
                 fluid
-                onClick={() => this.props.changeModal()} >
+                onClick={this.props.changeModal} >
                 New Post
               </Button>
 
@@ -93,7 +91,6 @@ class Home extends Component {
                     options={categories}
                     onChange={(e, d) => {
                       history.push(`/${d.value}`);
-                      //this.props.postRequest(d.value);
                     }}
                   />
                 </Header>
@@ -112,15 +109,15 @@ class Home extends Component {
 
           {Object.keys(posts).length === 0 && (
             <Message
+              id="info_no_posts"
               icon="hand pointer"
               color="blue"
               header="No posts added"
               content="Please click on New Post to add the first post"
             />
           )}
-
-          {
-            postsArray.map(p => (
+          
+          {postsArray.map(p => (
             <Post
               key={p.id}
               post={p}
@@ -140,7 +137,7 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = state => {  
   // Order by posts 
   const postsArray = _.orderBy(state.post.posts, state.post.orderBy, "desc");
   return ({
@@ -159,4 +156,4 @@ const mapDispatchToProps = dispatch => ({
   categoryRequest: () => dispatch(CategoryActions.categoryRequest())
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Home));
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
