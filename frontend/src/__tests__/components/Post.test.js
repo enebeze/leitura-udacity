@@ -30,10 +30,15 @@ function createWrapper() {
   return shallow(<Post post={post} />, { context: { store } }).dive();
 }
 
+let wrapper;
+
 describe("Testing component post", () => {
+  
+  beforeEach(() => {
+    wrapper = createWrapper();
+  });
+
   it("render link to details", () => {
-    /* my component */
-    const wrapper = createWrapper();
     /* Test values render */
     expect(
       wrapper
@@ -43,15 +48,11 @@ describe("Testing component post", () => {
   });
 
   it("render comments as expected", () => {
-    /* my component */
-    const wrapper = createWrapper();
     /* my expect */
     expect(wrapper.find(CommentPost)).toHaveLength(2);
   });
 
   it("button back only details page", () => {
-    /* my component */
-    const wrapper = createWrapper();
     /* no have button */
     expect(wrapper.find("#back")).toHaveLength(0);
     /* set details page */
@@ -61,8 +62,6 @@ describe("Testing component post", () => {
   });
 
   it("form add comments only details page", () => {
-    /* my component */
-    const wrapper = createWrapper();
     /* no have form add comment */
     expect(wrapper.find("#form_add_comment")).toHaveLength(0);
     /* set details page */
@@ -75,8 +74,6 @@ describe("Testing component post", () => {
 describe("Testing post actions", () => {
 
   it("should edit post", () => {
-    /* my component */
-    const wrapper = createWrapper();
     /* simulate edit button click */
     wrapper.find("#edit").simulate("click");
     /* my expect */
@@ -86,8 +83,6 @@ describe("Testing post actions", () => {
   it("should remove post", () => {
     /* my spy */
     sinon.spy(Modal, "confirm");
-    /* my component */
-    const wrapper = createWrapper();
     /* simulate button click */
     wrapper.find("#delete").simulate("click");    
     /* get params */
@@ -99,8 +94,6 @@ describe("Testing post actions", () => {
   });
 
   it("should like or not like post", () => {
-    /* my component */
-    const wrapper = createWrapper();
     /* simulate like button click */
     wrapper.find("#like_btn").simulate("click");
     /* expect action like */
@@ -116,8 +109,6 @@ describe("Testing post actions", () => {
 describe("Testing comment actions", () => {
 
   it("should clear comment when back button click", () => {
-    /* my component */
-    const wrapper = createWrapper();
     /* create function goback to simulate navigation */
     const history = { goBack: () => { }}
     /* set details page */
@@ -131,8 +122,6 @@ describe("Testing comment actions", () => {
   it("should save comment", () => {
     /* my spy */
     const saveCommentSpy = sinon.spy(CommentActions, "commentSave")
-    /* my component */
-    const wrapper = createWrapper();
     /* set details page */
     wrapper.setProps({ isDetailsPage: true });
     /* set state */
