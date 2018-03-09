@@ -43,9 +43,10 @@ class Post extends Component {
       parentId: this.props.post.id
     };
 
-    this.props.commentSave(comment, true, () => this.setState(INITIAL_STATE));
-    
+    this.props.commentSave(comment, true, this.callback);
   };
+
+  callback = () => this.setState(INITIAL_STATE);
 
   deletePost = () => {
 
@@ -102,7 +103,7 @@ class Post extends Component {
               <Item.Meta>
                 {`by ${author} `}
                 <span style={{ fontSize: "x-small" }}>
-                  <TimeAgo datetime={timestamp || Date.now()} />
+                  <TimeAgo datetime={timestamp} />
                 </span>
               </Item.Meta>
               <Item.Description>{body}</Item.Description>
@@ -184,6 +185,7 @@ class Post extends Component {
           {isDetailsPage && (
             <Form id="form_add_comment" reply>
               <Form.TextArea
+                id="bodyComment"
                 placeholder="Comment"
                 style={{ height: 80, minHeight: 80 }}
                 value={this.state.bodyComment}

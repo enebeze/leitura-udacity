@@ -86,17 +86,17 @@ class Home extends Component {
                 <Header as="h5" floated="left">
                   Categories by{" "}
                   <Dropdown
+                    id="category"
                     inline
                     value={categorySelected}
                     options={categories}
-                    onChange={(e, d) => {
-                      history.push(`/${d.value}`);
-                    }}
+                    onChange={(e, d) => history.push(`/${d.value}`) }
                   />
                 </Header>
                 <Header as="h5" floated="right">
                   Order by{" "}
                   <Dropdown
+                    id="order_posts"
                     inline
                     options={orderOptions}
                     value={this.props.postState.orderBy}

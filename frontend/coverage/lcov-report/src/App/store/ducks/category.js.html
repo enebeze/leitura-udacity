@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">80% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>0/12</span>
+        <span class='fraction'>4/5</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -35,13 +35,13 @@
         <span class='fraction'>0/1</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>0/7</span>
+        <span class='fraction'>4/4</span>
       </div>
     </div>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -70,57 +70,57 @@
 25
 26
 27
-28</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+28</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { crea<span class="cstat-no" title="statement not covered" >teActions, createReducer } from "reduxsauce";<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ></span></span></span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createActions, createReducer } from "reduxsauce";
 &nbsp;
 /* Types &amp; Creators */
 &nbsp;
-<span class="cstat-no" title="statement not covered" >const { Types, Creators } = createActions({</span>
+const { Types, Creators } = createActions({
   categoryRequest: null,
-  categoryRequestSuccess: ["categories"],<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ></span></span></span>
+  categoryRequestSuccess: ["categories"],
 });
 &nbsp;
-export { Types<span class="cstat-no" title="statement not covered" > };</span>
+export { Types };
 export default Creators;
 &nbsp;
 /* Initial State */
-const INITIAL_STATE = <span class="cstat-no" title="statement not covered" >{</span>
+const INITIAL_STATE = {
   categories: [],
 };
 &nbsp;
 /* Reducers */
 &nbsp;
-export const suc<span class="cstat-no" title="statement not covered" >cess = (state, act<span class="fstat-no" title="function not covered" >io</span>n) =&gt; ({<span class="cstat-no" title="statement not covered" ></span></span>
+export const success = <span class="fstat-no" title="function not covered" >(s</span>tate, action) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
   categories: action.categories,
 });
 &nbsp;
-export const red<span class="cstat-no" title="statement not covered" >ucer = createReducer(INITIAL_STATE, {</span>
+export const reducer = createReducer(INITIAL_STATE, {
   [Types.CATEGORY_REQUEST]: null,
   [Types.CATEGORY_REQUEST_SUCCESS]: success,
 });
@@ -130,7 +130,7 @@ export const red<span class="cstat-no" title="statement not covered" >ucer = cre
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Mar 09 2018 00:25:13 GMT-0300 (-03)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Mar 09 2018 14:55:13 GMT-0300 (-03)
 </div>
 </div>
 <script src="../../../../prettify.js"></script>

@@ -52,6 +52,12 @@ describe("Testing component post", () => {
     expect(wrapper.find(CommentPost)).toHaveLength(2);
   });
 
+  it("no render comments", () => {
+    initialState.comment.comments = [];
+    const wrapper = createWrapper();
+    expect(wrapper.find(CommentPost)).toHaveLength(0);
+  })
+
   it("button back only details page", () => {
     /* no have button */
     expect(wrapper.find("#back")).toHaveLength(0);
@@ -68,7 +74,17 @@ describe("Testing component post", () => {
     wrapper.setProps({ isDetailsPage: true });
     /* now have form add comment */
     expect(wrapper.find("#form_add_comment")).toHaveLength(1);
-  });  
+  });
+
+  it("should set body comment", () => {
+    const comment = "this is new comment";
+    /* set details page  */
+    wrapper.setProps({ isDetailsPage: true });
+    /* simulate change body comment */
+    wrapper.find("#bodyComment").simulate("change", null, { value: comment});
+    /* my expect */
+    expect(wrapper.instance().state.bodyComment).toBe(comment);
+  })
 });
 
 describe("Testing post actions", () => {
@@ -108,20 +124,23 @@ describe("Testing post actions", () => {
 
 describe("Testing comment actions", () => {
 
-  it("should clear comment when back button click", () => {
+  it("should clear comment when back button click and go back", () => {
     /* create function goback to simulate navigation */
-    const history = { goBack: () => { }}
+    const goBack = jest.fn();
     /* set details page */
-    wrapper.setProps({ isDetailsPage: true, history: history });
+    wrapper.setProps({ isDetailsPage: true, history: { goBack: goBack } });
     /* click button */
     wrapper.find("#back").simulate("click");
     /* expect action clear comment */
     expect(store.getActions()).toContainEqual(CommentActions.commentClear(post.id));
+    /* expect go back action  */
+    expect(goBack).toBeCalled();
   });
 
   it("should save comment", () => {
     /* my spy */
     const saveCommentSpy = sinon.spy(CommentActions, "commentSave")
+
     /* set details page */
     wrapper.setProps({ isDetailsPage: true });
     /* set state */
@@ -130,6 +149,12 @@ describe("Testing comment actions", () => {
     wrapper.find("#add_comment").simulate("click");
     /* expect the action save comment to be run once */
     expect(saveCommentSpy.calledOnce).toBe(true);
+    /* expect isAdd param is true */
+    expect(saveCommentSpy.args[0][1]).toBe(true);
+    /* callback function */
+    wrapper.instance().callback();
+    /* expect state initial */
+    expect(wrapper.instance().state.bodyComment).toBe("");
   })
 
 });

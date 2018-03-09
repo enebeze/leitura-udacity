@@ -49,7 +49,7 @@ class CommentPost extends Component {
   clearState = () => this.setState(INITIAL_STATE);
 
   render() {
-    /* propertys  */
+    /* properts  */
     const { author, timestamp, body, voteScore } = this.props.comment;
 
     return (
@@ -59,26 +59,27 @@ class CommentPost extends Component {
           <Comment.Content>
             <Comment.Author as="a">{author}</Comment.Author>
             <Comment.Metadata>
-              <TimeAgo datetime={timestamp || Date.now() } />
+              <TimeAgo datetime={timestamp} />
               <div>
                 <Icon name="star" />
                 {voteScore}
               </div>
               <Comment.Actions>
                 
-                <Comment.Action onClick={() => { this.likeNotLike("upVote"); }} >
+                <Comment.Action id="like" onClick={() => { this.likeNotLike("upVote"); }} >
                   <Icon name="like outline" />
                 </Comment.Action>
 
-                <Comment.Action onClick={() => { this.likeNotLike("downVote"); }}>
+                <Comment.Action id="not_like" onClick={() => { this.likeNotLike("downVote"); }}>
                   <Icon name="dislike outline" />
                 </Comment.Action>
 
               </Comment.Actions>
             </Comment.Metadata>
             {this.state.editComment ? (
-              <div>
+              <div id="form_edit">
                 <Form.TextArea
+                  id="bodyEdit"
                   placeholder="Comment"
                   value={this.state.bodyEdit}
                   style={{
@@ -90,22 +91,22 @@ class CommentPost extends Component {
                   }}
                   onChange={(e, { value }) => this.setState({ bodyEdit: value })} />
                 <Comment.Actions>
-                  <Comment.Action onClick={this.updateComment}>
+                  <Comment.Action id="save" onClick={this.updateComment}>
                     Save
                   </Comment.Action>
-                  <Comment.Action onClick={this.clearState}>
+                  <Comment.Action id="cancel" onClick={this.clearState}>
                     Cancel
                   </Comment.Action>
                 </Comment.Actions>
               </div>
             ) : (
-              <div>
+              <div id="comment_options">
                 <Comment.Text>{body}</Comment.Text>
                 <Comment.Actions>
-                  <Comment.Action onClick={this.editComment}>
+                  <Comment.Action id="edit" onClick={this.editComment}>
                     Edit
                   </Comment.Action>
-                  <Comment.Action onClick={this.deleteComment}>
+                  <Comment.Action id="delete" onClick={this.deleteComment}>
                     Delete
                   </Comment.Action>
                 </Comment.Actions>
