@@ -20,9 +20,8 @@ const { Types, Creators } = createActions({
   postLikeNotLike: ["postId", "voteScore"],
   postLikeNotLikeSuccess: ["postId", "voteScore"],
 
-  /* Outhers */
+  /* Order */
   postOrder: ["order"],
-  changeModal: ["postEdit"]
 });
 
 export { Types };
@@ -34,8 +33,6 @@ const INITIAL_STATE = {
   loading: false,
   error: false,
   isDetailsPage: false,
-  showModal: false,
-  postEdit: null,
   orderBy: "timestamp"
 };
 
@@ -86,17 +83,11 @@ export const likeNotLikeSuccess = (state, action) => ({
   }
 });
 
-/* Outher */
+/* order */
 
 export const order = (state, action) => ({
   ...state,
   orderBy: action.order,
-});
-
-export const changeModal = (state, action) => ({
-  ...state,
-  showModal: !state.showModal,
-  postEdit: action.postEdit
 });
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -114,5 +105,4 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.POST_LIKE_NOT_LIKE_SUCCESS]: likeNotLikeSuccess,
 
   [Types.POST_ORDER]: order,
-  [Types.CHANGE_MODAL]: changeModal
 });

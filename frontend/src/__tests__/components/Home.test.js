@@ -7,6 +7,7 @@ import sinon from "sinon";
 import PostActions from "../../app/store/ducks/posts";
 import CommentActions from "../../app/store/ducks/comment";
 import CategoryActions from "../../app/store/ducks/category";
+import FormActions from "../../app/store/ducks/form";
 
 /* Components */
 import Home from "../../app/views/Home";
@@ -113,7 +114,7 @@ describe("Testing home actions", () => {
     /* simulate new button click */
     wrapper.find("#new_post").simulate("click");
     /* my expect */
-    expect(store.getActions()).toContainEqual(PostActions.changeModal(null));
+    expect(store.getActions()).toContainEqual(FormActions.changeModal());
   });
 
   it("should order posts", () => {

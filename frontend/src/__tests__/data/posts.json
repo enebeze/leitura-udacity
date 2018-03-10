@@ -25,6 +25,7 @@
     "title": "New Post",
     "author": "author",
     "category": "redux",
-    "body": "body"
+    "body": "body",
+    "timestamp": 1468479767190
   }
 }

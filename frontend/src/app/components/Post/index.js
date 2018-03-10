@@ -25,6 +25,7 @@ import { connect } from "react-redux";
 /* Actions Creators */
 import PostActions from "./../../store/ducks/posts";
 import CommentActions from "./../../store/ducks/comment";
+import FormActions from "../../store/ducks/form";
 
 const INITIAL_STATE = {
   bodyComment: ""
@@ -228,7 +229,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  changeModal: postEdit => dispatch(PostActions.changeModal(postEdit)),
+  changeModal: postEdit => dispatch(FormActions.changeModal(postEdit)),
   postRemove: postId => dispatch(PostActions.postRemove(postId)),
   postLikeNotLike: (postId, value) => dispatch(PostActions.postLikeNotLike(postId, value)),
 

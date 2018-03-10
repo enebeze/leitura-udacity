@@ -6,6 +6,7 @@ import sinon from "sinon";
 /* Redux actions */
 import PostActions from "../../app/store/ducks/posts";
 import CommentActions from "../../app/store/ducks/comment";
+import FormActions from "../../app/store/ducks/form";
 
 /* Components */
 import Post from "../../app/components/Post";
@@ -32,12 +33,12 @@ function createWrapper() {
 
 let wrapper;
 
+beforeEach(() => {
+  wrapper = createWrapper();
+});
+
 describe("Testing component post", () => {
   
-  beforeEach(() => {
-    wrapper = createWrapper();
-  });
-
   it("render link to details", () => {
     /* Test values render */
     expect(
@@ -93,7 +94,7 @@ describe("Testing post actions", () => {
     /* simulate edit button click */
     wrapper.find("#edit").simulate("click");
     /* my expect */
-    expect(store.getActions()).toContainEqual(PostActions.changeModal(post));
+    expect(store.getActions()).toContainEqual(FormActions.changeModal(post));
   });
 
   it("should remove post", () => {

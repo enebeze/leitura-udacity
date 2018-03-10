@@ -13,7 +13,8 @@ import { call, put, select, take } from "redux-saga/effects";
 /* Types */
 import { Types as PostTypes } from "./../ducks/posts";
 /* Actions */
-import ActionCreators from "./../ducks/posts";
+import PostActions from "./../ducks/posts";
+import FormActions from "../ducks/form";
 
 import { arrayToObject } from "./../../util/helpers";
 
@@ -27,11 +28,11 @@ export function* postRequest(action) {
     // Object
     const objectPosts = arrayToObject(arrayPosts);
     // Post Success
-    yield put(ActionCreators.postRequestSuccess(objectPosts, action.postId ? true : false)
+    yield put(PostActions.postRequestSuccess(objectPosts, action.postId ? true : false)
     );
   } else {
     // Post Failure
-    yield put(ActionCreators.postRequestFailure());
+    yield put(PostActions.postRequestFailure());
   }
 }
 
@@ -43,7 +44,8 @@ export function* postSave(action) {
 
   if (response.ok) {
     // Update store
-    yield put(ActionCreators.postSaveSuccess(response.data));
+    yield put(PostActions.postSaveSuccess(response.data));
+    yield put(FormActions.changeModal());
   }
 }
 
@@ -57,7 +59,7 @@ export function* postRemove(action) {
     // Remove posts
     delete posts[action.postId];
     // Update Store
-    yield put(ActionCreators.postRemoveSuccess(posts));
+    yield put(PostActions.postRemoveSuccess(posts));
   }
 }
 
@@ -69,7 +71,7 @@ export function* postLikeNotLike(action) {
   if (response.ok) {
     // Update store
     yield put(
-      ActionCreators.postLikeNotLikeSuccess(
+      PostActions.postLikeNotLikeSuccess(
         action.postId,
         response.data.voteScore
       )

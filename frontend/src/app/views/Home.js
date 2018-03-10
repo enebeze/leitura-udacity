@@ -21,6 +21,7 @@ import { connect } from "react-redux";
 /* Actions Creators */
 import PostActions from "./../store/ducks/posts";
 import CategoryActions from "./../store/ducks/category";
+import FormActions from "./../store/ducks/form";
 
 const orderOptions = [
   { key: "d", text: "Date", value: "timestamp" },
@@ -150,7 +151,7 @@ const mapDispatchToProps = dispatch => ({
   /* Post Actions */
   postRequest: (category, postId) => dispatch(PostActions.postRequest(category, postId)),
   postOrder: order => dispatch(PostActions.postOrder(order)),
-  changeModal: () => dispatch(PostActions.changeModal(null)),
+  changeModal: () => dispatch(FormActions.changeModal()),
 
   /* Category Actions */
   categoryRequest: () => dispatch(CategoryActions.categoryRequest())
