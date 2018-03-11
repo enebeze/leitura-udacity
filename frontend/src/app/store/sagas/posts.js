@@ -1,11 +1,5 @@
 /* Api Post */
-import {
-  requestPosts,
-  add,
-  update,
-  remove,
-  likeNotLike
-} from "./../../api/apiPost";
+import * as apiPost from "./../../api/apiPost";
 import { message } from 'antd';
 
 import { call, put, select, take } from "redux-saga/effects";
@@ -20,8 +14,8 @@ import { arrayToObject } from "./../../util/helpers";
 
 export function* postRequest(action) {
   
-  const response = yield call(requestPosts, action.category, action.postId);
-
+  const response = yield call(apiPost.requestPosts, action.category, action.postId);
+  
   if (response.ok) {
     // Create array of posts and object to receive posts
     const arrayPosts = response.data instanceof Array ? response.data : [response.data];
@@ -38,7 +32,7 @@ export function* postRequest(action) {
 
 export function* postSave(action) {
   // Add or Update
-  const func = action.isAdd ? add : update;
+  const func = action.isAdd ? apiPost.add : apiPost.update;
   // Call func
   const response = yield call(func, action.post);
 
@@ -51,7 +45,7 @@ export function* postSave(action) {
 
 export function* postRemove(action) {
   // Call Delete func
-  const response = yield call(remove, action.postId);
+  const response = yield call(apiPost.remove, action.postId);
 
   if (response.ok) {
     // Get All posts
@@ -65,7 +59,7 @@ export function* postRemove(action) {
 
 export function* postLikeNotLike(action) {
   // Call Like or Dislike
-  const response = yield call(likeNotLike, action.postId, {
+  const response = yield call(apiPost.likeNotLike, action.postId, {
     option: action.voteScore
   });
   if (response.ok) {
@@ -80,12 +74,8 @@ export function* postLikeNotLike(action) {
 }
 
 export function* notification() {
-
   while(true) {
     yield take(PostTypes.POST_SAVE_SUCCESS);
-
     message.success('Post Save Success');
   }
-
-  
 }

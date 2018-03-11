@@ -4,10 +4,15 @@ import { requestCommentsByPostId, add, update, remove, likeNotLike } from "./../
 import { call, put, select, take } from "redux-saga/effects";
 
 /* Actions and Types */
-import ActionCreators from "./../ducks/comment";
+import CommentActions from "./../ducks/comment";
 import { Types as PostTypes } from "./../ducks/posts";
 
 import { arrayToObject } from "./../../util/helpers";
+
+const getStatePosts = state => {
+  if (state.post) return state.post.posts;
+  else return { }
+}
 
 export function* commentRequest(action) {
 
@@ -15,7 +20,7 @@ export function* commentRequest(action) {
     
     yield take(PostTypes.POST_REQUEST_SUCCESS);
 
-    const posts = yield select(state => state.post.posts);
+    const posts = yield select(getStatePosts);
 
     const comments = {};
 
@@ -32,7 +37,7 @@ export function* commentRequest(action) {
     }
 
     // Update state comments
-    yield put(ActionCreators.commentRequestSuccess(comments));
+    yield put(CommentActions.commentRequestSuccess(comments));
     
   }
 }
@@ -45,7 +50,7 @@ export function* commentSave(action) {
 
   if (response.ok) {
     // Update store
-    yield put(ActionCreators.commentSaveSuccess(response.data));
+    yield put(CommentActions.commentSaveSuccess(response.data));
     // Execute function callback
     if (action.callback) action.callback();
   }
@@ -61,7 +66,7 @@ export function* commentRemove(action) {
     // Remove comment
     delete comments[response.data.parentId][action.commentId];
     // Update Store
-    yield put(ActionCreators.commentRemoveSuccess(comments));
+    yield put(CommentActions.commentRemoveSuccess(comments));
   }
 }
 
@@ -71,6 +76,6 @@ export function* commentLikeNotLike(action) {
 
   if (response.ok) {
     // Update store
-    yield put(ActionCreators.commentSaveSuccess(response.data));
+    yield put(CommentActions.commentSaveSuccess(response.data));
   }
 }

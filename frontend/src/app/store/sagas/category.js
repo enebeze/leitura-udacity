@@ -1,7 +1,7 @@
 import { getAllCategories } from "./../../api/apiCategory";
 
 import { call, put } from "redux-saga/effects";
-import ActionCreators from "./../ducks/category";
+import CategoryActions from "./../ducks/category";
 
 export function* categoryRequest() {
   // Access api
@@ -13,6 +13,6 @@ export function* categoryRequest() {
       response.data.categories.map(a => ({ text: a.name, value: a.path }))
     );
     // Action success
-    yield put(ActionCreators.categoryRequestSuccess(categories));
+    yield put(CategoryActions.categoryRequestSuccess(categories));
   }
 };

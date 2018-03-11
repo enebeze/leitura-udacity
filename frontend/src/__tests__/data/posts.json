@@ -2,7 +2,7 @@
   "initialState": {
     "comment": {
       "comments": {
-        "1": {
+        "8xf0y6ziyjabvozdd253nd": {
           "1": {
             "id": 1,
             "author": "autho",
@@ -21,11 +21,14 @@
   },
   
   "post": {
-    "id": 1,
-    "title": "New Post",
-    "author": "author",
-    "category": "redux",
-    "body": "body",
-    "timestamp": 1468479767190
+    "id": "8xf0y6ziyjabvozdd253nd",
+    "timestamp": 1467166872634,
+    "title":  "Udacity is the best place to learn React",
+    "body": "Everyone says so after all.",
+    "author": "thingtwo",
+    "category": "react",
+    "voteScore": 6,
+    "deleted": false,
+    "commentCount": 2
   }
 }

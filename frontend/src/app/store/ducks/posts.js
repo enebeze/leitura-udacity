@@ -30,7 +30,6 @@ export default Creators;
 /* Initial State */
 const INITIAL_STATE = {
   posts: {},
-  loading: false,
   error: false,
   isDetailsPage: false,
   orderBy: "timestamp"
@@ -38,23 +37,16 @@ const INITIAL_STATE = {
 
 /* Reducers */
 
-export const request = state => ({
-  ...state,
-  loading: true
-});
-
 export const success = (state, action) => ({
   ...state,
   posts: action.posts,
   isDetailsPage: action.isDetailsPage,
-  loading: false,
   error: null
 });
 
 export const failure = state => ({
   ...state,
   posts: [],
-  loading: false,
   error: true
 });
 
@@ -91,7 +83,7 @@ export const order = (state, action) => ({
 });
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.POST_REQUEST]: request,
+  [Types.POST_REQUEST]: null,
   [Types.POST_REQUEST_SUCCESS]: success,
   [Types.POST_REQUEST_FAILURE]: failure,
 
