@@ -50,6 +50,32 @@ describe("Testing sagas posts", () => {
     );
   });
 
+  it("should request one post success", async () => {
+    /* mock the request api */
+    apiMock.onGet(`/posts/${posts[0].id}`).reply(200, posts[0]);
+    /* dispatch post request */
+    sagaTester.dispatch(PostActions.postRequest(posts[0].category, posts[0].id));
+    /* await for request success */
+    await sagaTester.waitFor(PostActions.postRequestSuccess().type);
+    /* expect the action request succes has been called */
+    expect(sagaTester.getCalledActions()).toContainEqual(
+      PostActions.postRequestSuccess(arrayToObject([posts[0]]), true)
+    );
+  });
+
+  it("should request all post of a category success", async () => {
+    /* mock the request api */
+    apiMock.onGet(`/${posts[0].category}/posts`).reply(200, posts[0]);
+    /* dispatch post request */
+    sagaTester.dispatch(PostActions.postRequest(posts[0].category));
+    /* await for request success */
+    await sagaTester.waitFor(PostActions.postRequestSuccess().type);
+    /* expect the action request succes has been called */
+    expect(sagaTester.getCalledActions()).toContainEqual(
+      PostActions.postRequestSuccess(arrayToObject([posts[0]]), false)
+    );
+  });
+
   it("should add post", async () => {
     /* mock the api add post */
     apiMock.onPost("/posts").reply(200, posts[0]);
