@@ -29,13 +29,12 @@ function createWrapper() {
   }).dive();
 }
 
-let wrapper;
-
-beforeEach(() => {
-  wrapper = createWrapper();
-});
-
 describe("Testing component CommentPost", () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = createWrapper();
+  });
   it("should like comment", () => {
     /* simulate click like */
     wrapper.find("#like").simulate("click");
@@ -96,32 +95,36 @@ describe("Testing component CommentPost", () => {
   });
 
   it("should cancel edit comment", () => {
-      /* edit comment */
-      wrapper.setState({ editComment: true });
-      /* simulate click to cancel */
-      wrapper.find("#cancel").simulate("click");
-      /* expect editComment is false */
-      expect(wrapper.state().editComment).toBe(false);
+    /* edit comment */
+    wrapper.setState({ editComment: true });
+    /* simulate click to cancel */
+    wrapper.find("#cancel").simulate("click");
+    /* expect editComment is false */
+    expect(wrapper.state().editComment).toBe(false);
   });
 
   it("should edit comment", () => {
-      /* simulate click edit */
-      wrapper.find("#edit").simulate("click");
-      /* expect change state */
-      expect(wrapper.state()).toEqual({ editComment: true, bodyEdit: comment.body });
+    /* simulate click edit */
+    wrapper.find("#edit").simulate("click");
+    /* expect change state */
+    expect(wrapper.state()).toEqual({
+      editComment: true,
+      bodyEdit: comment.body
+    });
   });
 
   it("should delete comment", () => {
     /* my spy */
     sinon.spy(Modal, "confirm");
     /* simulate button click */
-    wrapper.find("#delete").simulate("click");    
+    wrapper.find("#delete").simulate("click");
     /* get params */
     const params = Modal.confirm.args[0][0];
     /* Simulate press YES */
     params.onOk();
     /* my expect */
-    expect(store.getActions()).toContainEqual(CommentActions.commentRemove(comment.id));
-
+    expect(store.getActions()).toContainEqual(
+      CommentActions.commentRemove(comment.id)
+    );
   });
 });

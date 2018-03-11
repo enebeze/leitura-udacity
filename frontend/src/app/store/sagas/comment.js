@@ -1,5 +1,5 @@
 /* Api Comments */
-import { requestCommentsByPostId, add, update, remove, likeNotLike } from "./../../api/apiComment";
+import * as apiComment from "./../../api/apiComment";
 
 import { call, put, select, take } from "redux-saga/effects";
 
@@ -26,7 +26,7 @@ export function* commentRequest(action) {
 
     for (const postId in posts) {
 
-      const response = yield call(requestCommentsByPostId, postId);
+      const response = yield call(apiComment.requestCommentsByPostId, postId);
 
       if (response.ok) {
         // Comments object
@@ -44,7 +44,7 @@ export function* commentRequest(action) {
 
 export function* commentSave(action) {
   // Add or Update
-  const func = action.isAdd ? add : update;
+  const func = action.isAdd ? apiComment.add : apiComment.update;
   // Call func
   const response = yield call(func, action.comment);
 
@@ -58,7 +58,7 @@ export function* commentSave(action) {
 
 export function* commentRemove(action) {
   // Call Delete func
-  const response = yield call(remove, action.commentId);
+  const response = yield call(apiComment.remove, action.commentId);
 
   if (response.ok) {
     // Get a copy for all comments
@@ -72,7 +72,7 @@ export function* commentRemove(action) {
 
 export function* commentLikeNotLike(action) {
   // Call Like Not Dislike
-  const response = yield call(likeNotLike, action.commentId, { option: action.voteScore });
+  const response = yield call(apiComment.likeNotLike, action.commentId, { option: action.voteScore });
 
   if (response.ok) {
     // Update store

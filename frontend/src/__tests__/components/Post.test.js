@@ -11,7 +11,7 @@ import FormActions from "../../app/store/ducks/form";
 /* Components */
 import Post from "../../app/components/Post";
 import CommentPost from "../../app/components/CommentPost";
-import { Modal } from 'antd';
+import { Modal } from "antd";
 
 /* Mock store */
 const mockStore = configureStore();
@@ -31,21 +31,18 @@ function createWrapper() {
   return shallow(<Post post={post} />, { context: { store } }).dive();
 }
 
-let wrapper;
-
-beforeEach(() => {
-  wrapper = createWrapper();
-});
-
 describe("Testing component post", () => {
-  
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = createWrapper();
+  });
+
   it("render link to details", () => {
     /* Test values render */
-    expect(
-      wrapper
-        .find("#link_title")
-        .prop("to")
-    ).toBe(`/${post.category}/${post.id}`);
+    expect(wrapper.find("#link_title").prop("to")).toBe(
+      `/${post.category}/${post.id}`
+    );
   });
 
   it("render comments as expected", () => {
@@ -57,7 +54,7 @@ describe("Testing component post", () => {
     initialState.comment.comments = [];
     const wrapper = createWrapper();
     expect(wrapper.find(CommentPost)).toHaveLength(0);
-  })
+  });
 
   it("button back only details page", () => {
     /* no have button */
@@ -82,13 +79,18 @@ describe("Testing component post", () => {
     /* set details page  */
     wrapper.setProps({ isDetailsPage: true });
     /* simulate change body comment */
-    wrapper.find("#bodyComment").simulate("change", null, { value: comment});
+    wrapper.find("#bodyComment").simulate("change", null, { value: comment });
     /* my expect */
     expect(wrapper.instance().state.bodyComment).toBe(comment);
-  })
+  });
 });
 
 describe("Testing post actions", () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = createWrapper();
+  });
 
   it("should edit post", () => {
     /* simulate edit button click */
@@ -101,30 +103,38 @@ describe("Testing post actions", () => {
     /* my spy */
     sinon.spy(Modal, "confirm");
     /* simulate button click */
-    wrapper.find("#delete").simulate("click");    
+    wrapper.find("#delete").simulate("click");
     /* get params */
     const params = Modal.confirm.args[0][0];
     /* Simulate press YES */
     params.onOk();
     // my expect
-    expect(store.getActions()).toContainEqual(PostActions.postRemove(post.id));    
+    expect(store.getActions()).toContainEqual(PostActions.postRemove(post.id));
   });
 
   it("should like or not like post", () => {
     /* simulate like button click */
     wrapper.find("#like_btn").simulate("click");
     /* expect action like */
-    expect(store.getActions()).toContainEqual(PostActions.postLikeNotLike(post.id, "upVote"));
-    
+    expect(store.getActions()).toContainEqual(
+      PostActions.postLikeNotLike(post.id, "upVote")
+    );
+
     /* simulate not like button click */
     wrapper.find("#not_like_btn").simulate("click");
     /* expect action not like */
-    expect(store.getActions()).toContainEqual(PostActions.postLikeNotLike(post.id, "downVote"));
+    expect(store.getActions()).toContainEqual(
+      PostActions.postLikeNotLike(post.id, "downVote")
+    );
   });
-})
+});
 
 describe("Testing comment actions", () => {
+  let wrapper;
 
+  beforeEach(() => {
+    wrapper = createWrapper();
+  });
   it("should clear comment when back button click and go back", () => {
     /* create function goback to simulate navigation */
     const goBack = jest.fn();
@@ -133,14 +143,16 @@ describe("Testing comment actions", () => {
     /* click button */
     wrapper.find("#back").simulate("click");
     /* expect action clear comment */
-    expect(store.getActions()).toContainEqual(CommentActions.commentClear(post.id));
+    expect(store.getActions()).toContainEqual(
+      CommentActions.commentClear(post.id)
+    );
     /* expect go back action  */
     expect(goBack).toBeCalled();
   });
 
   it("should save comment", () => {
     /* my spy */
-    const saveCommentSpy = sinon.spy(CommentActions, "commentSave")
+    const saveCommentSpy = sinon.spy(CommentActions, "commentSave");
 
     /* set details page */
     wrapper.setProps({ isDetailsPage: true });
@@ -156,6 +168,5 @@ describe("Testing comment actions", () => {
     wrapper.instance().callback();
     /* expect state initial */
     expect(wrapper.instance().state.bodyComment).toBe("");
-  })
-
+  });
 });

@@ -46,7 +46,7 @@ export const success = (state, action) => ({
 
 export const failure = state => ({
   ...state,
-  posts: [],
+  posts: {},
   error: true
 });
 

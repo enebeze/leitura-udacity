@@ -31,13 +31,12 @@ function createWrapper() {
   return shallow(<FormPost />, { context: { store } }).dive();
 }
 
-let wrapper;
-
-beforeEach(() => {
-  wrapper = createWrapper();
-});
-
 describe("Testing form post", () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = createWrapper();
+  });
   it("should dispatch showModal on click cancel", () => {
     /* simulate click cancel */
     wrapper.find("#cancel").simulate("click");

@@ -41,13 +41,12 @@ function createWrapper() {
   return shallow(<Home match={params} />, { context: { store } }).dive();
 }
 
-let wrapper;
-
-beforeEach(() => {
-  wrapper = createWrapper();
-});
-
 describe("Testing render home component", () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = createWrapper();
+  });
   it("should render My header", () => {
     /* expect */
     expect(wrapper.find(MyHeader)).toHaveLength(1);
@@ -95,6 +94,12 @@ describe("Testing render home component", () => {
 });
 
 describe("Testing home actions", () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = createWrapper();
+  });
+  
   it("should request posts", () => {
     expect(store.getActions()).toContainEqual(PostActions.postRequest());
   });

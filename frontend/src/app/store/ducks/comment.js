@@ -14,12 +14,11 @@ const { Types, Creators } = createActions({
   commentRemove: ["commentId"],
   commentRemoveSuccess: ["comments"],
 
-  commentClear: null,
-
   /* Like or Not Like */
   commentLikeNotLike: ["commentId", "voteScore"],
-  commentLikeNotLikeSuccess: ["comment"]
 
+  /* clear */
+  commentClear: null,
 });
 
 export { Types };
