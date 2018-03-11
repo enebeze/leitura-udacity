@@ -26,14 +26,14 @@ describe("Testing comment reducer", () => {
 
   it("can remove comments success", () => {
     /* create state and reques success  */
-    const state = reducer({}, CommentActions.commentRequestSuccess(comments));
+    const state = reducer({}, CommentActions.commentRemoveSuccess(comments));
     /* expect posts has been added */
     expect(state.comments).toEqual(comments);
   });
 
   it("can clear comments", () => {
     /* create state with comments  */
-    let state = reducer(comments, CommentActions.commentRequestSuccess(comments));
+    let state = reducer(comments);
     /* clear comments */
     state = reducer(state, CommentActions.commentClear());
     /* expect comments has been cleared */
