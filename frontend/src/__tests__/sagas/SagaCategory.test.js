@@ -1,11 +1,8 @@
-import { runSaga } from "redux-saga";
 import SagaTester from "redux-saga-tester";
 import MockAdapter from "axios-mock-adapter";
-import sinon from "sinon";
-import * as apiCategory from "../../app/api/apiPost";
 import api from "../../app/api/api";
 import rootSaga from "../../app/store/sagas";
-import CategoryAction, { reducer } from "../../app/store/ducks/category";
+import CategoryAction from "../../app/store/ducks/category";
 
 const categories = {
   categories: [
@@ -38,7 +35,7 @@ describe("Testing saga category", () => {
   it("should request category success", async () => {
     /* mock the request api */
     apiMock.onGet("/categories").reply(200, categories);
-    /* dispatch post request */
+    /* dispatch category request */
     sagaTester.dispatch(CategoryAction.categoryRequest());
     /* await for request success */
      await sagaTester.waitFor(CategoryAction.categoryRequestSuccess().type);

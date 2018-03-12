@@ -1,6 +1,6 @@
 /* Api Comments */
 import * as apiComment from "./../../api/apiComment";
-
+/* effects redux */
 import { call, put, select, take } from "redux-saga/effects";
 
 /* Actions and Types */
@@ -9,6 +9,7 @@ import { Types as PostTypes } from "./../ducks/posts";
 
 import { arrayToObject } from "./../../util/helpers";
 
+/* get posts from state */
 const getStatePosts = state => {
   if (state.post) return state.post.posts;
   else return { }
@@ -20,32 +21,34 @@ export function* commentRequest(action) {
     
     yield take(PostTypes.POST_REQUEST_SUCCESS);
 
+    /* get posts from state */
     const posts = yield select(getStatePosts);
 
+    /* new objeto to comments */
     const comments = {};
 
     for (const postId in posts) {
 
+      /* get comments from post */
       const response = yield call(apiComment.requestCommentsByPostId, postId);
 
       if (response.ok) {
-        // Comments object
+        /* Comments object */
         const objectComments = arrayToObject(response.data);
-        // Add to object 
+        /* Add to object  */
         comments[postId] = objectComments;
       }
     }
 
     // Update state comments
-    yield put(CommentActions.commentRequestSuccess(comments));
-    
+    yield put(CommentActions.commentRequestSuccess(comments)); 
   }
 }
 
 export function* commentSave(action) {
-  // Add or Update
+  /* Add or Update */
   const func = action.isAdd ? apiComment.add : apiComment.update;
-  // Call func
+  /* Call func */
   const response = yield call(func, action.comment);
 
   if (response.ok) {
