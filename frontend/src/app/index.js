@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
-import Home from "./views/Home";
+import App from "./views/App";
 
 import { Provider } from "react-redux";
 import createStore from "./store";
@@ -11,8 +11,7 @@ export default () => (
   <Provider store={store} >
     <BrowserRouter>
       <div>
-        {/* <Route exact path="/" component={Home} /> */}
-        <Route exact path="/:category?/:postId?" component={Home} />
+        <Route exact path="/:category?/:postId?" component={App} />
       </div>
     </BrowserRouter>
   </Provider>

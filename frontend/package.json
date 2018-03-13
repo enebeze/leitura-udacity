@@ -5,6 +5,8 @@
   "dependencies": {
     "antd": "^3.1.6",
     "apisauce": "^0.14.3",
+    "firebase": "^4.11.0",
+    "firebaseui": "^2.6.2",
     "lodash": "^4.17.5",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -37,6 +39,8 @@
     "sinon": "^4.4.2"
   },
   "jest": {
-    "setupFiles": ["<rootDir>/src/setupTests.js"]
+    "setupFiles": [
+      "<rootDir>/src/setupTests.js"
+    ]
   }
 }

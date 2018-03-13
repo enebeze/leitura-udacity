@@ -9,7 +9,7 @@ body {
   line-height: 64px;
   padding: 0 24px;
   cursor: pointer;
-  transition: color .3s;
+  transition: color 0.3s;
 }
 
 #components-layout-demo-custom-trigger .trigger:hover {
@@ -18,6 +18,92 @@ body {
 
 #components-layout-demo-custom-trigger .logo {
   height: 32px;
-  background: rgba(255,255,255,.2);
+  background: rgba(255, 255, 255, 0.2);
   margin: 16px;
+}
+
+#page-splash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0288d1;
+  background: radial-gradient(circle, #039be5, #01579b);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  flex-direction: column;
+}
+#page-splash .fp-caption {
+  margin: 20px 0 40px 0;
+  font-family: "Amaranth", sans-serif;
+  font-size: 18px;
+  opacity: 0.8;
+}
+#page-splash .fp-skip {
+  font-weight: lighter;
+  color: white;
+  opacity: 0.7;
+  width: 100%;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+#page-splash .fp-skip:hover {
+  text-decoration: underline;
+}
+.fp-note {
+  background-color: #fff;
+  opacity: 0.7;
+  border: 1px #999 solid;
+  border-radius: 10px;
+  position: fixed;
+  bottom: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  color: #555;
+  padding: 10px;
+  max-width: 600px;
+}
+.fp-help {
+  margin-left: auto;
+  margin-right: auto;
+}
+.fp-help p {
+  font-size: 16px;
+}
+.fp-help .mdl-card__supporting-text {
+  display: flex;
+  width: 100%;
+  padding-top: 30px;
+  padding-left: 30px;
+  padding-right: 30px;
+  box-sizing: border-box;
+}
+.fp-help .fp-info {
+  font-size: 60px;
+  padding-right: 30px;
+  min-width: 60px;
+}
+.fp-help p .material-icons {
+  top: 7px;
+  position: relative;
+  margin-right: 3px;
+}
+.fp-no-posts {
+  display: none;
+}
+.fp-logo {
+  font-family: "Amaranth", sans-serif;
+  color: white;
+  text-decoration: none;
+}
+
+
+#firebaseui-auth-container {
+  min-width: 251px;
 }

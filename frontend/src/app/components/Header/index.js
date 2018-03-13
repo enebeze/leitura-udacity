@@ -1,23 +1,24 @@
 import React from "react";
 
-import { Menu, Container, Image, Button } from 'semantic-ui-react'
+import { Menu, Container, Image } from 'semantic-ui-react';
+import { Link } from "react-router-dom";
+
 
 const Header = () => (
+  
   <Menu style={{ background: "#02acfe" }} fixed="top" inverted>
     <Container>
-      <Menu.Item as="a" header>
+      <Menu.Item header>
         <Image
           size="mini"
           src="/favicon.ico"
           style={{ marginRight: "1.5em" }}
         />
-        Leitura Udacity by Ebenézer
+        <Link to="/">Leitura Udacity by Ebenézer</Link>
       </Menu.Item>
 
       <Menu.Item position="right">
-        <Button as="a" primary style={{ marginLeft: "0.5em" }}>
-          Sign Up
-        </Button>
+        <Link to="/Login" >Sign Up</Link> 
       </Menu.Item>
     </Container>
   </Menu>

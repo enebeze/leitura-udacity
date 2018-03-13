@@ -33,17 +33,17 @@ class Home extends Component {
 
   componentDidMount() {
     // Receive props
-    const { match: { params } } = this.props;
-    this.props.postRequest(params.category, params.postId);
+    const { category, postId } = this.props;
+    this.props.postRequest(category, postId);
     // Get Categories
     this.props.categoryRequest();
   }
 
   componentWillReceiveProps(nextPros) {
-    const { match: { params } } = nextPros;
-    if (params.category !== this.props.match.params.category || 
-        params.postId !== this.props.match.params.postId)
-      this.props.postRequest(params.category, params.postId);
+    const { category, postId } = nextPros;
+    if (category !== this.props.category || 
+        postId !== this.props.postId)
+      this.props.postRequest(category, postId);
   }
 
   render() {
@@ -52,7 +52,7 @@ class Home extends Component {
     const { posts, isDetailsPage, postsArray } = this.props.postState;
 
     /* Route Params */
-    const categorySelected = this.props.match.params.category;
+    const categorySelected = this.props.category;
     const { history } = this.props;
 
     return (
