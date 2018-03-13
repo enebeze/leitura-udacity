@@ -7,6 +7,7 @@ import { reducer as post } from "./ducks/posts";
 import { reducer as category } from "./ducks/category";
 import { reducer as comment } from "./ducks/comment";
 import { reducer as form } from "./ducks/form";
+import { reducer as auth } from "./ducks/auth";
 
 export default () => {
   // Combine reducers
@@ -14,7 +15,8 @@ export default () => {
     post,
     comment,
     category,
-    form
+    form,
+    auth
   });
   // Return configure store with reducers and sagas
   return configureStore(rootReducer, rootSaga);

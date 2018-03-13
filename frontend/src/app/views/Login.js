@@ -7,6 +7,7 @@ import { firebaseUi, uiConfig } from "../firebase/firebase";
 class Login extends Component {
 
   componentDidMount() {
+    
     /* config firebase login */
     firebaseUi.start("#firebaseui-auth-container", uiConfig);
   }
@@ -25,21 +26,10 @@ class Login extends Component {
               id="firebaseui-auth-container"
               className="fp-signed-out-only fp-initially-hidden"
             />
-            {/* <div style={{
-                marginBottom: 25
-            }} >
-              <Button content="facebook" color='facebook' icon='facebook' />
-              <Button content="google" color='google plus' icon='google plus' />
-            </div> */}
             <Link className="fp-skip" to="/">
               skip sign in
             </Link>
           </div>
-          {/* <div className="fp-note">
-            Disclaimer: This is a sample application aimed at showcasing the{" "}
-            <a href="https://firebase.developers.google.com/docs">Firebase</a>{" "}
-            platform capabilities. Avoid posting personal or private data.
-          </div> */}
         </div>
       </div>
     );

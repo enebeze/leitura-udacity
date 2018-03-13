@@ -19,13 +19,15 @@ const auth = firebase.auth();
 const firebaseUi = new firebaseui.auth.AuthUI(auth);
 
 const uiConfig = {
-    signInFlow: "popup",
-    signInOptions: [
-    // Leave the lines as is for the providers you want to offer your users.
+  // callbacks: {
+  //   signInSuccess: function(currentUser, credential, redirectUrl) {
+  //     return false;
+  //   }
+  // },
+  signInFlow: "popup",
+  signInOptions: [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-    firebase.auth.GithubAuthProvider.PROVIDER_ID,
-    firebase.auth.EmailAuthProvider.PROVIDER_ID,
+    firebase.auth.FacebookAuthProvider.PROVIDER_ID
   ]
 };
 

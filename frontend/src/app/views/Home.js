@@ -23,6 +23,7 @@ import PostActions from "./../store/ducks/posts";
 import CategoryActions from "./../store/ducks/category";
 import FormActions from "./../store/ducks/form";
 
+
 const orderOptions = [
   { key: "d", text: "Date", value: "timestamp" },
   { key: "p", text: "Score", value: "voteScore" },
@@ -143,7 +144,8 @@ const mapStateToProps = state => {
   const postsArray = _.orderBy(state.post.posts, state.post.orderBy, "desc");
   return ({
     postState: { ...state.post, postsArray },
-    categoryState: state.category
+    categoryState: state.category,
+    user: state.auth.user
   })
 };
 
