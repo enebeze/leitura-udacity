@@ -69,7 +69,7 @@ describe("Testing component post", () => {
     /* no have form add comment */
     expect(wrapper.find("#form_add_comment")).toHaveLength(0);
     /* set details page */
-    wrapper.setProps({ isDetailsPage: true });
+    wrapper.setProps({ isDetailsPage: true, user: { author: "thingone" } });
     /* now have form add comment */
     expect(wrapper.find("#form_add_comment")).toHaveLength(1);
   });
@@ -100,6 +100,8 @@ describe("Testing post actions", () => {
   });
 
   it("should remove post", () => {
+    /* callback moke */
+    const callback = wrapper.instance().goBack;
     /* my spy */
     sinon.spy(Modal, "confirm");
     /* simulate button click */
@@ -109,7 +111,7 @@ describe("Testing post actions", () => {
     /* Simulate press YES */
     params.onOk();
     // my expect
-    expect(store.getActions()).toContainEqual(PostActions.postRemove(post.id));
+    expect(store.getActions()).toContainEqual(PostActions.postRemove(post.id, callback));
   });
 
   it("should like or not like post", () => {

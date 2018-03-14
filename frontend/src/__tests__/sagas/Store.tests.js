@@ -12,6 +12,9 @@ const stateInitial = {
   form: {
     showModal: false,
     postEdit: { title: "", author: "", category: "", body: "" }
+  },
+  auth: {
+    user: null
   }
 };
 

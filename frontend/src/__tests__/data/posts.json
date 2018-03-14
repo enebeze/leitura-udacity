@@ -17,7 +17,10 @@
           }
         }
       }
-    }
+    },
+    "auth": {
+      "user": { "author": "thingtwo" }
+    } 
   },
   
   "post": {
@@ -29,6 +32,7 @@
     "category": "react",
     "voteScore": 6,
     "deleted": false,
-    "commentCount": 2
+    "commentCount": 2,
+    "photoURL": "/images/avatar/small/thingtwo.jpg"
   }
 }

@@ -20,7 +20,7 @@ const datas = require("../data/comment.json");
 const { comment } = datas;
 
 /* store */
-const store = mockStore();
+const store = mockStore({ auth: { user: { author: "thingtwo" }}});
 
 /* Component post */
 function createWrapper() {

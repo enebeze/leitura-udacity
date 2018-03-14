@@ -20,7 +20,8 @@ const post = datas.post;
 
 const initialState = {
   form: { postEdit: post },
-  category: {}
+  category: {},
+  auth: { user: {} }
 };
 
 /* store */
@@ -31,7 +32,7 @@ function createWrapper() {
   return shallow(<FormPost />, { context: { store } }).dive();
 }
 
-describe("Testing form post", () => {
+describe("Testing component form post", () => {
   let wrapper;
 
   beforeEach(() => {
@@ -83,14 +84,12 @@ describe("Testing form post", () => {
   });
 
   it("fields disabled when id null", () => {
-    expect(wrapper.find("#author").prop("disabled")).toBe(true);
     expect(wrapper.find("#category").prop("disabled")).toBe(true);
   });
 
   it("fields enabled when id null", () => {
     post.id = undefined;
     const wrapper = createWrapper();
-    expect(wrapper.find("#author").prop("disabled")).toBe(false);
     expect(wrapper.find("#category").prop("disabled")).toBe(false);
   });
 });

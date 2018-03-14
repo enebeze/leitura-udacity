@@ -7,7 +7,8 @@
     "author": "thingtwo",
     "voteScore": 6,
     "deleted": false,
-    "parentDeleted": false
+    "parentDeleted": false,
+    "photoURL": "/images/avatar/small/thingtwo.jpg"
   },
   "comments": [
     {
@@ -18,7 +19,8 @@
       "author": "thingtwo",
       "voteScore": 6,
       "deleted": false,
-      "parentDeleted": false
+      "parentDeleted": false,
+      "photoURL": "/images/avatar/small/thingtwo.jpg"
     },
     {
       "id": "8tu4bsun805n8un48ve89",
@@ -28,7 +30,8 @@
       "author": "thingone",
       "voteScore": -5,
       "deleted": false,
-      "parentDeleted": false
+      "parentDeleted": false,
+      "photoURL": "/images/avatar/small/thingone.jpg"
     }
   ],
 
@@ -42,7 +45,8 @@
         "author": "thingtwo",
         "voteScore": 6,
         "deleted": false,
-        "parentDeleted": false
+        "parentDeleted": false,
+        "photoURL": "/images/avatar/small/thingtwo.jpg"
       },
       "8tu4bsun805n8un48ve89": {
         "id": "8tu4bsun805n8un48ve89",
@@ -52,7 +56,8 @@
         "author": "thingone",
         "voteScore": -5,
         "deleted": false,
-        "parentDeleted": false
+        "parentDeleted": false,
+        "photoURL": "/images/avatar/small/thingone.jpg"
       }
     }
   }
