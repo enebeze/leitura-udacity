@@ -4,6 +4,8 @@ import { Menu, Container, Image, Button } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { auth } from "../../firebase";
 
+import AuthActions from "../../store/ducks/auth";
+
 import { connect } from "react-redux";
 
 class Header extends Component {
@@ -15,8 +17,9 @@ class Header extends Component {
         <Container>
           <Menu.Item header>
             <Image
+              avatar
               size="mini"
-              src="/favicon.ico"
+              src={user ? user.photoURL : `/favicon.ico`}
               style={{ marginRight: "1.5em" }}
             />
             <Link to="/">Leitura Udacity by Ebenézer</Link>
@@ -29,6 +32,7 @@ class Header extends Component {
                 style={{ marginLeft: "0.5em" }}
                 onClick={() => {
                   auth.doSignOut();
+                  this.props.logout();
                 }}
               >
                 Sign Out
@@ -47,4 +51,8 @@ const mapStateToProps = state => ({
   user: state.auth.user
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = dispatch => ({
+  logout: () => dispatch(AuthActions.authLogout())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

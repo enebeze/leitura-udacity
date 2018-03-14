@@ -39,9 +39,11 @@ class FormPost extends Component {
   addPost = () => {
     /* receive post */
     const post = this.props.formState.postEdit;
-    /* generate id  */
     post.id = generateId();
+    post.author = this.props.user.author;
+    post.photoURL = this.props.user.photoURL
     post.timestamp = _.now();
+    
     /* save post */
     this.props.postSave(post, true);
   };
@@ -61,7 +63,6 @@ class FormPost extends Component {
   render() {
     /* Categories and Posts Redux */
     const { categories } = this.props.categoryState;
-  
     const { postEdit, showModal } = this.props.formState;
 
     return (
@@ -82,11 +83,10 @@ class FormPost extends Component {
           <Form.Input
             id="author"
             required
-            disabled={postEdit.id ? true : false}
+            disabled={true}
             placeholder="Author"
             name="author"
-            value={postEdit.author}
-            onChange={this.handleChange}
+            value={this.props.user.author}
           />
 
           <Form.Dropdown
@@ -123,7 +123,8 @@ class FormPost extends Component {
 
 const mapStateToProps = state => ({
   categoryState: state.category,
-  formState: state.form
+  formState: state.form,
+  user: state.auth.user || { }
 });
 
 const mapDispatchToProps = dispatch => ({

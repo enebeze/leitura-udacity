@@ -5,6 +5,7 @@ import MyHeader from "./../components/Header";
 import FormPost from "./../components/FormPost";
 
 import _ from "lodash";
+import { message } from "antd";
 
 import {
   Container,
@@ -23,15 +24,13 @@ import PostActions from "./../store/ducks/posts";
 import CategoryActions from "./../store/ducks/category";
 import FormActions from "./../store/ducks/form";
 
-
 const orderOptions = [
   { key: "d", text: "Date", value: "timestamp" },
   { key: "p", text: "Score", value: "voteScore" },
-  { key: "c", text: "Comments", value: "commentCount" },
+  { key: "c", text: "Comments", value: "commentCount" }
 ];
 
 class Home extends Component {
-
   componentDidMount() {
     // Receive props
     const { category, postId } = this.props;
@@ -42,10 +41,17 @@ class Home extends Component {
 
   componentWillReceiveProps(nextPros) {
     const { category, postId } = nextPros;
-    if (category !== this.props.category || 
-        postId !== this.props.postId)
+    if (category !== this.props.category || postId !== this.props.postId)
       this.props.postRequest(category, postId);
   }
+
+  newPost = () => {
+    if (this.props.user) {
+      this.props.changeModal();
+    } else {
+      message.warning("Please login to post!");
+    }
+  };
 
   render() {
     /* Categories and Posts Redux */
@@ -55,7 +61,7 @@ class Home extends Component {
     /* Route Params */
     const categorySelected = this.props.category;
     const { history } = this.props;
-
+    
     return (
       <div>
         <MyHeader />
@@ -69,13 +75,14 @@ class Home extends Component {
               </Header>
             </div>
           ) : (
-            <div id="header_home" >
+            <div id="header_home">
               <Button
                 id="new_post"
                 basic
                 color="blue"
                 fluid
-                onClick={this.props.changeModal} >
+                onClick={this.newPost}
+              >
                 New Post
               </Button>
 
@@ -92,7 +99,7 @@ class Home extends Component {
                     inline
                     value={categorySelected}
                     options={categories}
-                    onChange={(e, d) => history.push(`/${d.value}`) }
+                    onChange={(e, d) => history.push(`/${d.value}`)}
                   />
                 </Header>
                 <Header as="h5" floated="right">
@@ -109,7 +116,7 @@ class Home extends Component {
             </div>
           )}
 
-          {Object.keys(posts).length === 0 && (
+          {(Object.keys(posts).length === 0 && !this.props.postId ) && (
             <Message
               id="info_no_posts"
               icon="hand pointer"
@@ -118,7 +125,17 @@ class Home extends Component {
               content="Please click on New Post to add the first post"
             />
           )}
-          
+
+          {(Object.keys(posts).length === 0 && this.props.postId ) && (
+              <Message
+                id="info_post_deleted"
+                icon="announcement"
+                color="red"
+                header="404 Post not found"
+                content="This post not exist or was deleted"
+              />
+            )}
+
           {postsArray.map(p => (
             <Post
               key={p.id}
@@ -127,8 +144,6 @@ class Home extends Component {
               history={history}
             />
           ))}
-
-          
         </Container>
 
         <Footer />
@@ -139,19 +154,20 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = state => {  
-  // Order by posts 
+const mapStateToProps = state => {
+  // Order by posts
   const postsArray = _.orderBy(state.post.posts, state.post.orderBy, "desc");
-  return ({
+  return {
     postState: { ...state.post, postsArray },
     categoryState: state.category,
     user: state.auth.user
-  })
+  };
 };
 
 const mapDispatchToProps = dispatch => ({
   /* Post Actions */
-  postRequest: (category, postId) => dispatch(PostActions.postRequest(category, postId)),
+  postRequest: (category, postId) =>
+    dispatch(PostActions.postRequest(category, postId)),
   postOrder: order => dispatch(PostActions.postOrder(order)),
   changeModal: () => dispatch(FormActions.changeModal()),
 

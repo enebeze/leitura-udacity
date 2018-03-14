@@ -36,12 +36,14 @@ class Post extends Component {
   state = INITIAL_STATE;
 
   addNewComment = () => {
+    const { author, photoURL } = this.props.user;
     const comment = {
       id: generateId(),
       timestamp: Date.now(),
       body: this.state.bodyComment,
-      author: "enebeze",
-      parentId: this.props.post.id
+      author: author,
+      parentId: this.props.post.id,
+      photoURL: photoURL
     };
 
     this.props.commentSave(comment, true, this.callback);
@@ -57,7 +59,7 @@ class Post extends Component {
       okType: 'danger',
       cancelText: 'No',
       onOk: () => { 
-        this.props.postRemove(this.props.post.id) 
+        this.props.postRemove(this.props.post.id, this.goBack)
       }
     });
 
@@ -78,23 +80,27 @@ class Post extends Component {
       body,
       category,
       voteScore,
-      timestamp
+      timestamp,
+      photoURL
     } = this.props.post;
+
+    
     
     const comments = _.values(this.props.comments[id]) || [];
-    
     const { isDetailsPage } = this.props;
 
+    const canEdit = author === this.props.user.author;
+    
     return (
       <div
         style={{
           paddingTop: 10,
           paddingBottom: 10
-        }}
-      >
+        }}>
         <Item.Group>
           <Item>
-            <Item.Content>
+            <Item.Image rounded size="mini" src={photoURL} />
+            <Item.Content>  
               <Item.Header>
                 <Link id="link_title" to={`/${category}/${id}`} style={{ color: "#000" }}>
                   {title}
@@ -144,6 +150,7 @@ class Post extends Component {
               </Item.Extra>
             </Item.Content>
 
+          {canEdit && (
             <Item.Content style={{ textAlign: "right" }}>
               <Dropdown icon="block layout">
                 <Dropdown.Menu>
@@ -162,6 +169,7 @@ class Post extends Component {
                 </Dropdown.Menu>
               </Dropdown>
             </Item.Content>
+          )}
           </Item>
         </Item.Group>
 
@@ -169,9 +177,9 @@ class Post extends Component {
           size="mini"
           style={{
             paddingTop: 0,
-            maxWidth: "100%"
-          }}
-        >
+            maxWidth: "100%",
+            paddingLeft: 50
+          }}>
           
             <Header as="h4">
               Comments
@@ -183,7 +191,7 @@ class Post extends Component {
 
           {comments.map(c => <CommentPost key={c.id} comment={c} />)}
 
-          {isDetailsPage && (
+          {(isDetailsPage && this.props.user.author) && (
             <Form id="form_add_comment" reply>
               <Form.TextArea
                 id="bodyComment"
@@ -211,13 +219,15 @@ class Post extends Component {
         <Divider />
 
         {isDetailsPage && (
-            <Button
-              labelPosition="left"
-              icon="left chevron"
-              content="Back"
-              id="back"
-              onClick={this.goBack}
-            />
+            <div style={{ paddingLeft: 50 }}>
+              <Button
+                labelPosition="left"
+                icon="left chevron"
+                content="Back"
+                id="back"
+                onClick={this.goBack}
+              />
+            </div>
           )}
       </div>
     );
@@ -226,11 +236,12 @@ class Post extends Component {
 
 const mapStateToProps = state => ({
   comments: state.comment.comments,
+  user: state.auth.user || { }
 });
 
 const mapDispatchToProps = dispatch => ({
   changeModal: postEdit => dispatch(FormActions.changeModal(postEdit)),
-  postRemove: postId => dispatch(PostActions.postRemove(postId)),
+  postRemove: (postId, callback) => dispatch(PostActions.postRemove(postId, callback)),
   postLikeNotLike: (postId, value) => dispatch(PostActions.postLikeNotLike(postId, value)),
 
   /* Comment */

@@ -1,11 +1,9 @@
 /* Api Post */
 import * as apiPost from "./../../api/apiPost";
-import { message } from 'antd';
+import { message } from "antd";
+/* Effects redux */
+import { call, put, select } from "redux-saga/effects";
 
-import { call, put, select, take } from "redux-saga/effects";
-
-/* Types */
-import { Types as PostTypes } from "./../ducks/posts";
 /* Actions */
 import PostActions from "./../ducks/posts";
 import FormActions from "../ducks/form";
@@ -13,20 +11,32 @@ import FormActions from "../ducks/form";
 import { arrayToObject } from "./../../util/helpers";
 
 export function* postRequest(action) {
-  
-  const response = yield call(apiPost.requestPosts, action.category, action.postId);
-  
-  if (response.ok) {
-    // Create array of posts and object to receive posts
-    const arrayPosts = response.data instanceof Array ? response.data : [response.data];
-    // Object
-    const objectPosts = arrayToObject(arrayPosts);
-    // Post Success
-    yield put(PostActions.postRequestSuccess(objectPosts, action.postId ? true : false)
+  message.loading("Loading posts...", 2000);
+
+  try {
+    const response = yield call(
+      apiPost.requestPosts,
+      action.category,
+      action.postId
     );
-  } else {
+    if (Object.keys(response.data).length !== 0) {
+      // Create array of posts and object to receive posts
+      const arrayPosts = response.data instanceof Array ? response.data : [response.data];
+      // Object
+      const objectPosts = arrayToObject(arrayPosts);
+      // Post Success
+      yield put(
+        PostActions.postRequestSuccess(
+          objectPosts,
+          action.postId ? true : false
+        )
+      );
+    }
+  } catch (e) {
     // Post Failure
     yield put(PostActions.postRequestFailure());
+  } finally {
+    setTimeout(message.destroy, 500);
   }
 }
 
@@ -54,6 +64,7 @@ export function* postRemove(action) {
     delete posts[action.postId];
     // Update Store
     yield put(PostActions.postRemoveSuccess(posts));
+    if (action.callback) action.callback();
   }
 }
 
@@ -65,17 +76,7 @@ export function* postLikeNotLike(action) {
   if (response.ok) {
     // Update store
     yield put(
-      PostActions.postLikeNotLikeSuccess(
-        action.postId,
-        response.data.voteScore
-      )
+      PostActions.postLikeNotLikeSuccess(action.postId, response.data.voteScore)
     );
-  }
-}
-
-export function* notification() {
-  while(true) {
-    yield take(PostTypes.POST_SAVE_SUCCESS);
-    message.success('Post Save Success');
   }
 }

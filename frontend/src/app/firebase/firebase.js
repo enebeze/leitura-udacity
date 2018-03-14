@@ -18,17 +18,24 @@ const auth = firebase.auth();
 
 const firebaseUi = new firebaseui.auth.AuthUI(auth);
 
-const uiConfig = {
-  // callbacks: {
-  //   signInSuccess: function(currentUser, credential, redirectUrl) {
-  //     return false;
-  //   }
-  // },
-  signInFlow: "popup",
-  signInOptions: [
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    firebase.auth.FacebookAuthProvider.PROVIDER_ID
-  ]
+const createUiConfig = signInSuccess => {
+  return {
+    callbacks: {
+      signInSuccess
+    },
+    signInFlow: "popup",
+    signInOptions: [
+      {
+        provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        customParameters: {
+          // Forces account selection even when one account
+          // is available.
+          prompt: "select_account"
+        }
+      },
+      firebase.auth.FacebookAuthProvider.PROVIDER_ID
+    ]
+  };
 };
 
-export { auth, firebaseUi, uiConfig };
+export { auth, firebaseUi, createUiConfig };

@@ -13,7 +13,7 @@ const { Types, Creators } = createActions({
   postSaveSuccess: ["post"],
 
   /* Remove */
-  postRemove: ["postId"],
+  postRemove: ["postId", "callback"],
   postRemoveSuccess: ["posts"],
 
   /* Like or Not Like */

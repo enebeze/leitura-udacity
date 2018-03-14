@@ -12,7 +12,8 @@ const defaultData = {
     author: 'thingtwo',
     voteScore: 6,
     deleted: false,
-    parentDeleted: false
+    parentDeleted: false,
+    photoURL: "/images/avatar/small/thingtwo.jpg"
   },
   "8tu4bsun805n8un48ve89": {
     id: '8tu4bsun805n8un48ve89',
@@ -22,7 +23,8 @@ const defaultData = {
     author: 'thingone',
     voteScore: -5,
     deleted: false,
-    parentDeleted: false
+    parentDeleted: false,
+    photoURL: "/images/avatar/small/thingone.jpg"
   }
 }
 
@@ -66,7 +68,8 @@ function add (token, comment) {
       parentId: comment.parentId,
       voteScore: 1,
       deleted: false,
-      parentDeleted: false
+      parentDeleted: false,
+      photoURL: comment.photoURL
     }
 
     posts.incrementCommentCounter(token, comment.parentId, 1)
