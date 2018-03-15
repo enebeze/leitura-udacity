@@ -11,7 +11,7 @@ Google ou Facebook. E só é permitido editar ou excluir os seus próprios posts
 
 `yarn` ou `npm install`
 
-* Executando
+### Executando
 
 `yarn start` ou `npm start`
 
@@ -25,7 +25,7 @@ Este aplicativo só funcionará com o servidor de api deste repositório.
 
 `npm install`
 
-* Executando
+### Executando
 
 `node server`
 
@@ -38,4 +38,13 @@ Foi implementado alguns testes utilizando Jest, Enzyme, Sinon e outros.
 Para execução dos testes pode ser executado o comando `yarn test`.
 
 Para mostrar mais detalhes o seguinte comando pode ser executado `yarn test --coverage`
+
+# Bibliotecas usadas neste projeto
+
+* [Apisauce] (https://github.com/infinitered/apisauce)
+* [Redux] (https://redux.js.org/)
+* [Redux Saga] (https://github.com/redux-saga/redux-saga)
+* [Reduxsauce] (https://github.com/infinitered/reduxsauce)
+* [React Router Dom] (https://reacttraining.com/react-router/web/guides/philosophy)
+* [Firebase] (https://firebase.google.com/)
 
