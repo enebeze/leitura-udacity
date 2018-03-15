@@ -23,6 +23,6 @@ jest.mock('../../app/firebase/firebase', () => {
 describe("Testing Header", () => {
   it("renders as aspected", () => {
     const wrapper = shallow(<Header />, { context: { store } }).dive();
-    expect(wrapper.children().children()).toHaveLength(2);
+    expect(wrapper.children().children()).toHaveLength(3);
   });
 });

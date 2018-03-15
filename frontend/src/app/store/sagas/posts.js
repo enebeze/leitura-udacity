@@ -23,7 +23,8 @@ export function* postRequest(action) {
     if (response.ok) {
       if (Object.keys(response.data).length !== 0) {
         // Create array of posts and object to receive posts
-        const arrayPosts = response.data instanceof Array ? response.data : [response.data];
+        const arrayPosts =
+          response.data instanceof Array ? response.data : [response.data];
         // Object
         const objectPosts = arrayToObject(arrayPosts);
         // Post Success
@@ -34,6 +35,9 @@ export function* postRequest(action) {
           )
         );
       }
+    } else {
+      // Post Failure
+      yield put(PostActions.postRequestFailure());
     }
   } catch (e) {
     // Post Failure
