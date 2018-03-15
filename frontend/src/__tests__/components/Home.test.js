@@ -18,6 +18,9 @@ import FormPost from "../../app/components/FormPost";
 import { Message } from "semantic-ui-react";
 import { Modal } from "antd";
 
+import { message } from "antd";
+import sinon from "sinon";
+
 /* Mock store */
 const mockStore = configureStore();
 
@@ -35,6 +38,16 @@ const { initialState, category, params } = datas;
 const state = JSON.parse(JSON.stringify(initialState));
 /* store */
 const store = mockStore(state);
+
+jest.mock('../../app/firebase/firebase', () => {
+
+  const firebasemock = require('firebase-mock');
+  const mockauth = new firebasemock.MockFirebase();
+  const mocksdk = new firebasemock.MockFirebaseSdk(null, mockauth)
+  const firebase = mocksdk.initializeApp();
+  // return the mock to match your export api
+  return firebase;
+});
 
 /* Component post */
 function createWrapper() {
@@ -110,7 +123,7 @@ describe("Testing home actions", () => {
     );
   });
 
-  it("should show modal", () => {
+  it("should show modal to add new post", () => {
     /* set state true */
     state.post.isDetailsPage = false;
     /* my component */
@@ -119,6 +132,19 @@ describe("Testing home actions", () => {
     wrapper.find("#new_post").simulate("click");
     /* my expect */
     expect(store.getActions()).toContainEqual(FormActions.changeModal());
+  });
+
+  it("should send message if user is not logeed", () => {
+    const showMessage = sinon.spy(message, "warning");
+    /* set state true */
+    state.post.isDetailsPage = false;
+    state.auth.user = null
+    /* my component */
+    const wrapper = createWrapper();
+    /* simulate new button click */
+    wrapper.find("#new_post").simulate("click");
+    /* my expect */
+    expect(showMessage.calledWith("Please login to post!")).toBe(true);
   });
 
   it("should order posts", () => {
@@ -134,9 +160,7 @@ describe("Testing home actions", () => {
     const category = initialState.post.posts[0].category;
 
     /* Set new props */
-    wrapper.setProps({
-      match: { params: { category: category, postId: postId } }
-    });
+    wrapper.setProps({ category, postId });
     /* expect request again */
     expect(store.getActions()).toContainEqual(
       PostActions.postRequest(category, postId)

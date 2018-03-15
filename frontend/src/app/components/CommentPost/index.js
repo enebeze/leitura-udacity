@@ -3,6 +3,8 @@ import TimeAgo from "timeago-react";
 import { Comment, Form, Icon } from "semantic-ui-react";
 import { Modal } from "antd";
 
+import PropTypes from "prop-types";
+
 /* Redux */
 import { connect } from "react-redux";
 
@@ -17,6 +19,10 @@ const INITIAL_STATE = {
 
 class CommentPost extends Component {
   state = INITIAL_STATE;
+
+  static propTypes = {
+    comment: PropTypes.object.isRequired,
+  }
 
   /* Update comment */
   updateComment = () => {

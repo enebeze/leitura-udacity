@@ -20,7 +20,7 @@ const Footer = () => (
             </List>
           </Grid.Column>
           <Grid.Column width={8}>
-            <Header inverted as="h4" content="Bibliotecas" />
+            <Header inverted as="h4" content="Librarys" />
             <List link inverted>
               <List.Item as="a">Semantict UI React</List.Item>
               <List.Item as="a">React Router Dom</List.Item>

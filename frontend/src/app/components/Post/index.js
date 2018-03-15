@@ -36,7 +36,9 @@ class Post extends Component {
   state = INITIAL_STATE;
 
   addNewComment = () => {
+    /* receive author and photo url */
     const { author, photoURL } = this.props.user;
+    /* create object comment */
     const comment = {
       id: generateId(),
       timestamp: Date.now(),
@@ -45,14 +47,15 @@ class Post extends Component {
       parentId: this.props.post.id,
       photoURL: photoURL
     };
-
+    /* save and run callback */
     this.props.commentSave(comment, true, this.callback);
   };
 
+  /* callback function before save comment */
   callback = () => this.setState(INITIAL_STATE);
 
   deletePost = () => {
-
+    /* show modal */
     Modal.confirm({
       title: 'Are you sure delete this post?',
       okText: 'Yes',
@@ -84,11 +87,8 @@ class Post extends Component {
       photoURL
     } = this.props.post;
 
-    
-    
     const comments = _.values(this.props.comments[id]) || [];
     const { isDetailsPage } = this.props;
-
     const canEdit = author === this.props.user.author;
     
     return (
@@ -189,7 +189,7 @@ class Post extends Component {
             </Header>
           
 
-          {comments.map(c => <CommentPost key={c.id} comment={c} />)}
+          {comments.map(c => <CommentPost key={c.id} comment={c}  />)}
 
           {(isDetailsPage && this.props.user.author) && (
             <Form id="form_add_comment" reply>

@@ -10,7 +10,6 @@ import { connect } from "react-redux";
 
 class App extends Component {
   componentDidMount() {
-
     let self = this;
     auth.onAuthStateChanged(function(currentUser) {
       if (currentUser) {

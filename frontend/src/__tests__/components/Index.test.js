@@ -1,14 +1,9 @@
 import React from "react";
 import { shallow } from "enzyme";
-import Header from "../../app/components/Header";
+import App from "../../app";
 
-import configureStore from "redux-mock-store";
-
-/* Mock store */
-const mockStore = configureStore();
-
-/* store */
-const store = mockStore({ auth: { user: { }}});
+import { Provider } from "react-redux";
+import { BrowserRouter, Route } from "react-router-dom";
 
 jest.mock('../../app/firebase/firebase', () => {
 
@@ -20,9 +15,12 @@ jest.mock('../../app/firebase/firebase', () => {
   return firebase;
 });
 
-describe("Testing Header", () => {
+describe("Testing App", () => {
+
   it("renders as aspected", () => {
-    const wrapper = shallow(<Header />, { context: { store } }).dive();
-    expect(wrapper.children().children()).toHaveLength(2);
-  });
+    const wrapper = shallow(<App />);
+    expect(wrapper.find(Provider)).toHaveLength(1);
+    expect(wrapper.find(BrowserRouter)).toHaveLength(1);
+    expect(wrapper.find(Route)).toHaveLength(1);
+  });  
 });

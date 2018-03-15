@@ -12,7 +12,6 @@ import PostActions from "./../../store/ducks/posts";
 import FormActions from "./../../store/ducks/form";
 
 const INITIAL_STATE = {
-  titleModal: "New Post",
   categoryError: false
 };
 
@@ -24,11 +23,13 @@ class FormPost extends Component {
   handleChange = (e, { name, value }) => this.props.handleChange(name, value);
 
   savePost = () => {
+    /* validate category */
     if (!this.props.formState.postEdit.category) {
       this.setState({ categoryError: true });
       return;
     }
 
+    /* save post */
     if (!this.props.formState.postEdit.id) {
       this.addPost();
     } else {
@@ -67,7 +68,7 @@ class FormPost extends Component {
 
     return (
       <Modal
-        title={this.state.titleModal}
+        title={postEdit.id ? "Edit Post" : "New Post"}
         visible={showModal}
         footer={null}
         onCancel={this.onCancel}

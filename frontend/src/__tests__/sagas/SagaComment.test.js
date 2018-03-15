@@ -40,7 +40,7 @@ describe("Testing sagas comments", () => {
     gen.next(postsObjects); /* call */
     /* put */
     const result = gen.next({ ok: true, data: comments }).value.PUT.action;
-    /* objeto to test */
+    /* object to test */
     commentsPost[posts[0].id] = arrayToObject(comments);
     /* expect action result has request success */
     expect(result).toEqual(CommentActions.commentRequestSuccess(commentsPost));

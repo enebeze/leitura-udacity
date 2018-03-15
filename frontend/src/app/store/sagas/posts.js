@@ -19,18 +19,21 @@ export function* postRequest(action) {
       action.category,
       action.postId
     );
-    if (Object.keys(response.data).length !== 0) {
-      // Create array of posts and object to receive posts
-      const arrayPosts = response.data instanceof Array ? response.data : [response.data];
-      // Object
-      const objectPosts = arrayToObject(arrayPosts);
-      // Post Success
-      yield put(
-        PostActions.postRequestSuccess(
-          objectPosts,
-          action.postId ? true : false
-        )
-      );
+
+    if (response.ok) {
+      if (Object.keys(response.data).length !== 0) {
+        // Create array of posts and object to receive posts
+        const arrayPosts = response.data instanceof Array ? response.data : [response.data];
+        // Object
+        const objectPosts = arrayToObject(arrayPosts);
+        // Post Success
+        yield put(
+          PostActions.postRequestSuccess(
+            objectPosts,
+            action.postId ? true : false
+          )
+        );
+      }
     }
   } catch (e) {
     // Post Failure

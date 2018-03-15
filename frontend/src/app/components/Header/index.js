@@ -9,32 +9,39 @@ import AuthActions from "../../store/ducks/auth";
 import { connect } from "react-redux";
 
 class Header extends Component {
+  logout = () => {
+    auth.doSignOut();
+    this.props.logout();
+  };
+
   render() {
     const user = this.props.user;
 
     return (
       <Menu style={{ background: "#02acfe" }} fixed="top" inverted>
         <Container>
-          <Menu.Item header>
-            <Image
-              avatar
-              size="mini"
-              src={user ? user.photoURL : `/favicon.ico`}
-              style={{ marginRight: "1.5em" }}
-            />
+          <Menu.Item>
             <Link to="/">Leitura Udacity by Ebenézer</Link>
           </Menu.Item>
+
+          {user && (
+            <Menu.Item>
+              <Image
+                avatar
+                size="mini"
+                src={user ? user.photoURL : ``}
+                style={{ marginRight: "1.5em" }}
+              />
+              Welcome {user.author}
+            </Menu.Item>
+          )}
 
           <Menu.Item position="right">
             {user ? (
               <Button
                 primary
                 style={{ marginLeft: "0.5em" }}
-                onClick={() => {
-                  auth.doSignOut();
-                  this.props.logout();
-                }}
-              >
+                onClick={this.logout}>
                 Sign Out
               </Button>
             ) : (
@@ -53,6 +60,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(AuthActions.authLogout())
-})
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
