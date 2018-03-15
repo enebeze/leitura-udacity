@@ -41,10 +41,10 @@ Para mostrar mais detalhes o seguinte comando pode ser executado `yarn test --co
 
 # Bibliotecas usadas neste projeto
 
-* [Apisauce] (https://github.com/infinitered/apisauce)
-* [Redux] (https://redux.js.org/)
-* [Redux Saga] (https://github.com/redux-saga/redux-saga)
-* [Reduxsauce] (https://github.com/infinitered/reduxsauce)
-* [React Router Dom] (https://reacttraining.com/react-router/web/guides/philosophy)
-* [Firebase] (https://firebase.google.com/)
+* Apisauce - (https://github.com/infinitered/apisauce)
+* Redux - (https://redux.js.org/)
+* Redux Saga - (https://github.com/redux-saga/redux-saga)
+* Reduxsauce - (https://github.com/infinitered/reduxsauce)
+* React Router Dom - (https://reacttraining.com/react-router/web/guides/philosophy)
+* Firebase - (https://firebase.google.com/)
 
