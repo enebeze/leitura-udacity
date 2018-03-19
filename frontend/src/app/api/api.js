@@ -1,6 +1,6 @@
 import { create } from "apisauce";
 
-const baseURL = "http://localhost:3001";
+const baseURL = "https://api-server-udacity.azurewebsites.net";
 
 let token = localStorage.token;
 if (!token) token = localStorage.token = "bXktcmVhZHMtZWJlbmV6ZXI=";

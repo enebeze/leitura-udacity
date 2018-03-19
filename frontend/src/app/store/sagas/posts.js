@@ -21,20 +21,18 @@ export function* postRequest(action) {
     );
 
     if (response.ok) {
+      let objectPosts = {};
+
       if (Object.keys(response.data).length !== 0) {
         // Create array of posts and object to receive posts
-        const arrayPosts =
-          response.data instanceof Array ? response.data : [response.data];
+        const arrayPosts = response.data instanceof Array ? response.data : [response.data];
         // Object
-        const objectPosts = arrayToObject(arrayPosts);
-        // Post Success
-        yield put(
-          PostActions.postRequestSuccess(
-            objectPosts,
-            action.postId ? true : false
-          )
-        );
-      }
+        objectPosts = arrayToObject(arrayPosts);
+      } 
+
+      // Post Success
+      yield put(PostActions.postRequestSuccess(objectPosts, action.postId ? true : false));
+
     } else {
       // Post Failure
       yield put(PostActions.postRequestFailure());
@@ -43,7 +41,8 @@ export function* postRequest(action) {
     // Post Failure
     yield put(PostActions.postRequestFailure());
   } finally {
-    setTimeout(message.destroy, 500);
+    message.destroy();
+    //setTimeout(message.destroy, 500);
   }
 }
 
