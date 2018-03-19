@@ -71,7 +71,7 @@ class Post extends Component {
   goBack = () => {
     const { history } = this.props;
     this.props.commentClear();
-    history.goBack();
+    if (this.props.isDetailsPage) history.goBack();
   }
 
   render() {
