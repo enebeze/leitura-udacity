@@ -3,6 +3,8 @@
 Este é um aplicativo web de conteúdo e comentários. Nele é permitido que os usuários postem conteúdo em categorias pré-definidas, façam comentários em suas próprias postagens e nas de outros usuários e votem nas postagens e comentários. Para poder postar e comentar é necessário que faça login no aplicativo através do 
 Google ou Facebook. E só é permitido editar ou excluir os seus próprios posts e comentários.
 
+https://leitura-udacity.azurewebsites.net
+
 # Instalação e Execução
 
 ### Instalando dependências do Frontend
